@@ -37,4 +37,12 @@ git add app/scripts/controllers/kakugenctrl.js
 #消す対象のファイルをコミット対象とする時
 git rm app/scripts/controllers/detail.jsbk
 #ディレクトリ単位でコミットしたい時は以下のようにディレクトリ指定も可能
-git add ./ 
+git add ./
+#コミット対象を確認する
+git status
+#コミットする
+git commit
+#m オプションを使用するとコメントを同時にセットできる
+git commit -m"feature/58" -m"格言画面へ飛ぶように修正"`
+#githubへpush
+git push origin xxx
