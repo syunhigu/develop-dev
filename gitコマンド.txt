@@ -54,4 +54,8 @@ git push origin xxx
 # masterブランチに移動
 git checkout master
 # masterブランチにfeatureブランチをマージします
-git merge feature/58`
+git merge feature/58
+#コミットする
+git commit -m "feature/58"
+#githubへpush
+git push origin xxx
