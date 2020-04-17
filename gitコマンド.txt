@@ -21,6 +21,7 @@ git branch -a
 git push -u origin 作成したブランチ
 
 ------------------------------------
+#コミット
 #変更したファイルの一覧を確認
 git status
 ※メッセージ内容
@@ -46,3 +47,11 @@ git commit
 git commit -m"feature/58" -m"格言画面へ飛ぶように修正"`
 #githubへpush
 git push origin xxx
+
+------------------------------------
+#マージしたい時
+#masterブランチにマージするとき
+# masterブランチに移動
+git checkout master
+# masterブランチにfeatureブランチをマージします
+git merge feature/58`
