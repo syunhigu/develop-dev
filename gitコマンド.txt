@@ -1,0 +1,40 @@
+#gitクローン
+#クローンしたいフォルダに移動
+cd フォルダ
+git clone https://github.com/syunhigu/develop-dev.git
+#ローカルのブランチからブランチを作成する方法
+#ブランチ一覧表示
+git branch -a
+#ブランチを作る元のブランチに切り替える
+git checkout master
+#ブランチを作成
+git checkout -b 作成するブランチ名
+#ブランチをリモートに登録
+git push -u origin 作成したブランチ名
+
+#リモートブランチから作る方法
+#リモートブランチからローカルブランチを作成
+git checkout -b ローカルに作成するブランチ名 origin/作成元のリモートのブランチ名
+#ブランチ一覧表示
+git branch -a
+#ブランチをリモートに登録
+git push -u origin 作成したブランチ
+
+------------------------------------
+#変更したファイルの一覧を確認
+git status
+※メッセージ内容
+・modified:修正したファイル
+・deleted:削除したファイル
+・Untracked files:新規作成したファイル
+#変更したファイルのソースコードを確認
+git diff
+#変更点に問題なければコミット
+#コミットしたいファイルを選択
+git add xxx
+※例
+git add app/scripts/controllers/kakugenctrl.js
+#消す対象のファイルをコミット対象とする時
+git rm app/scripts/controllers/detail.jsbk
+#ディレクトリ単位でコミットしたい時は以下のようにディレクトリ指定も可能
+git add ./ 
