@@ -1,0 +1,79 @@
+#パッケージ管理について
+※詳細については下記URL参照
+https://qiita.com/takeshisakuma/items/e9685fb9e394212247c0
+
+#パッケージ管理システムを使うメリット
+・ターミナルからインストール、アンインストールができる
+・アップデートをまとめて行える
+・OSの再インストール時など環境移行時に一括でインストールできる
+
+#使用ツール
+ツール        ：管理対象
+Homebrew     ：CUIアプリ
+Homebrew Cask：GUIアプリ
+mas-cli      ：Mac App Storeにあるアプリ
+※Homebrew Caskとmas-cliでは、同じアプリが含まれる場合があるので、
+その場合どちらで管理するか決めておく
+
+#パッケージマネージャーのインストール
+#準備
+Homebrewを使うにはXcodeが必要
+#Xcodeのインストール
+※ターミナルを起動し、下記コマンド実行
+xcode-select --install
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+※Homebrewから最新のものをコピー
+HomebrewURL：https://brew.sh/index_ja
+※Homebrewをインストールする場所に権限が無いと表示される場合は、下記コマンド実行
+sudo chown -R $(whoami):admin /usr/local
+#mas-cliのインストール
+brew install mas
+
+#パッケージのインストール
+brew install (package name)
+brew cask install (package name)
+mas install (package ID)
+※IDは、URL末尾の「id406056744?mt=12」のような文字列のidと?の間の数字
+mas-cliでのインストールは、Apple IDと紐付けるため一度App Storeから入手しておく必要がある
+Affinity DesignerなどのようにApp Storeと販売元が併売している場合、
+販売元から直接購入するとmasでのインストールはできない
+#インストール時にディレクトリが存在しないというエラーが出る場合
+フォルダを作成し、権限を付ける
+sudo mkdir /usr/local/(directory name)
+sudo chown -R $(whoami) /usr/local/(directory name)
+#パッケージのアンインストール
+brew uninstall (package name)
+brew cask uninstall (package name)
+mas uninstall (package ID)
+#アップデートがあるパッケージ一覧
+brew outdated
+brew cask outdated
+mas outdated
+#パッケージのアップデート
+brew upgrade
+brew cask upgrade
+mas upgrade
+#インストール済みパッケージ一覧
+brew list
+brew cask list
+mas list
+#インストールしたパッケージの管理状態診断
+brew doctor
+※You have unlinked kags in your Cellarと表示されたらリンクを修正
+brew unlink (package name)
+brew link (package name)
+brew cleanup
+
+#環境移行
+#Brawfileの生成
+brew bundle dump
+#Brewfileからパッケージをインストール
+brew bundle
+
+#インストールしたアプリが起動できないとき
+Homebrewに限ったことではないが、
+Mac App Store以外からインストールしたアプリを起動しようとすると、
+「悪質なソフトウェアか確認できないため開けません」と表示される場合がある
+その場合はControlキーを押しながら起動すると、再度「悪質な～」のウィンドウが表示されるが、
+「開く」ボタンが追加されているので、クリックすると開ける
+一度起動すると、次からは最初から開ける
