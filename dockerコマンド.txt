@@ -1,0 +1,50 @@
+Dockerコマンドでイメージ作成からコンテナ起動まで
+https://kitsune.blog/docker-command
+dockerコマンド
+
+#仮想マシン確認
+docker-machine ls
+#Dockerイメージの確認
+docker images
+#Dockerイメージの検索
+docker search [オプション] [ キーワード ]
+※使い方の実例
+mysqlのイメージを検索
+docker search mysql
+オプションの使い方
+★３つ以上で、公式のイメージのみを検索
+docker search --filter "stars=3" --filter "is-official=true" mysql
+公式リファレンスURL
+http://docs.docker.jp/engine/reference/commandline/search.html
+
+#Dockerコンテナの作成
+「-it」…ホストとコンテナの標準入出力を繋げる
+「-d」…バックグラウンドで実行
+「-p」…「ホストマシンのポート：コンテナのポート」でポートフォワード（転送）
+「--name」…コンテナに名前をつける
+# CentOS7のコンテナを作成
+docker run -it -d -p 8080:80 --name centos centos:7
+#Dockerコンテナに接続（ログイン）
+docker exec -it centos bash
+#yumでNginxのリポジトリをインストール
+yum localinstall -y http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
+#yumでNginxをインストール
+yum install -y nginx
+#Nginxを起動
+nginx
+
+#起動中のコンテナを確認
+docker ps
+#Dockerコンテナを起動
+docker start centos
+#Dockerコンテナを停止
+docker stop centos
+
+#Dockerイメージを作成
+docker commit centos original-nginx
+#作成したイメージからコンテナを作成し起動
+docker run -it -d -p 8181:80 --name original-nginx original-nginx
+#「original-nginx」コンテナにログイン
+docker exec -it original-nginx bash
+#Nginxがインストールされていることを確認
+nginx -v
