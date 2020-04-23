@@ -1,0 +1,119 @@
+■eclipseインストール
+brew search eclipse
+brew cask install eclipse-ide
+#javaインストール
+java14
+brew cask install java
+brew cask install java11
+#open jdk
+brew install openjdk
+sudo ln -sfn /usr/local/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
+echo 'export PATH="/usr/local/opt/openjdk/bin:$PATH"' >> ~/.bash_profile
+echo 'export PATH="/usr/local/opt/openjdk@13/bin:$PATH"' >> ~/.bash_profile
+brew install openjdk@11
+sudo ln -sfn /usr/local/opt/openjdk@11/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-11.jdk
+echo 'export PATH="/usr/local/opt/openjdk@11/bin:$PATH"' >> ~/.bash_profile
+export CPPFLAGS="-I/usr/local/opt/openjdk@11/include"
+#インストール済みJDK(JAVA_HOME)の確認
+/usr/libexec/java_home -V
+
+#java home
+vi ~/.bashrc追記
+export JAVA_HOME=`/usr/libexec/java_home -v "14"`
+PATH=${JAVA_HOME}/bin:${PATH}
+export JAVA_HOME=`/usr/libexec/java_home -v "11"`
+PATH=${JAVA_HOME}/bin:${PATH}
+
+export PATH=$PATH:/Library/Java/JavaVirtualMachines/openjdk-14.jdk/Contents/Home/bin
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/openjdk-14.jdk/Contents/Home
+＃jEnvのインストール
+brew install jenv
+
+#PATHを設定
+# Shell: bash
+echo 'export PATH="$HOME/.jenv/bin:$PATH"' >> ~/.bash_profile
+echo 'eval "$(jenv init -)"' >> ~/.bash_profile
+#ディレクトリを作成
+mkdir -p ~/.jenv/versions
+#jEnvにJDKを追加
+jenv add `/usr/libexec/java_home -v "11.0"`
+jenv add `/usr/libexec/java_home -v "14"`
+jenv add `/usr/libexec/java_home -v "13.0"`
+
+#java8インストール
+brew tap AdoptOpenJDK/openjdk
+brew cask install adoptopenjdk8-jre
+jenv add `/usr/libexec/java_home -v "1.8"`
+
+#jEnvに追加されているJDKの一覧
+jenv versions
+#Javaの切り替え
+#グローバル
+jenv global 14
+#ローカル
+jenv local 11.0
+
+#eclipse-inst.ini に Java8 のパスを設定
+Finder で "Eclipse Installer.app" を右クリック
+> パッケージの内容を表示
+> Contents/Eclipse/eclipse-inst.ini をテキストエディタで開く
+eclipse-inst.ini に下記2行を追加
+-vm
+/Users/user_name/.jenv/versions/1.8/bin/java
+※例
+〜抜粋〜
+--launcher.appendVmargs
+-vm
+/Users/syunhigu/.jenv/versions/1.8/bin/java
+-vmargs
+-Dosgi.requiredJavaVersion=1.8
+-Dosgi.instance.area.default=@user.home/eclipse-workspace
+-XX:+UseG1GC
+-XX:+UseStringDeduplication
+〜抜粋ここまで〜
+#手動コピーと設定ファイル編集で日本語化
+Pleiades プラグイン・ダウンロード
+https://mergedoc.osdn.jp/#pleiades.html#PLUGIN
+#Pleiades を構成ディレクトリにコピー
+ダウンロードした「pleiades」ディレクトリの内の
+「features」と「plugins」を、そのままEclipseの「features」と「plugins」に追加
+1.Eclipse.appを右クリックしてメニューから「パッケージの内容を表示」をクリック
+2.Contents > Eclipse
+3.ダウンロードしたPleiadesの「features」と「plugins」に入っているファイルを
+そのまま、Eclipseの「features」と「plugins」内にコピー（追加）
+#Eclipseの起動ファイルを修正
+{Eclipseの配置場所}/Eclipse.app/Content/Eclipse/eclipse.ini
+#eclipse.iniに以下を追記
+-Xverify:none
+-javaagent:{Eclipseの配置場所}/Eclipse.app/Content/Eclipse/plugins/jp.sourceforge.mergedoc.pleiades/pleiades.jar
+
+■intellijインストール（コミュニティエディション）
+brew cask search intellij
+brew cask install intellij-idea-ce
+#手動コピーと設定ファイル編集で日本語化
+Pleiades プラグイン・ダウンロード
+https://mergedoc.osdn.jp/#pleiades.html#PLUGIN
+#Pleiades を構成ディレクトリにコピー
+上記でダウンロードした zip を解凍し、中の plugins/jp.sourceforge.mergedoc.pleiades/ を
+ {構成ディレクトリ}/jp.sourceforge.mergedoc.pleiades/ にコピー
+OS     ：構成ディレクトリ
+Windows：C:/Users/(ユーザ名)/.(製品名バージョン)/config
+macOS  ：/Users/(ユーザ名)/Library/Preferences/(製品名バージョン)
+*nix   ：/home/(ユーザ名)/.(製品名バージョン)/config
+(製品名バージョン) の例： IntelliJIDEA2018.2 , PhpStorm2018.2 , RubyMine2018.2 , etc...
+#カスタム VM オプションファイルを編集
+JetBrains 製品を起動し、ようこそ画面の右下にある Configuration▼ > Edit Custom VM Options... で
+vmoptions ファイルを開き (初回は新規作成ダイアログが表示されるので Yes を押す)、下記の 2 行を最後に追加して再起動
+※-Xverify:none がすでに指定されている場合は不要
+-Xverify:none
+javaagent:/Users/syunhigu/Library/Application Support/JetBrains/IdeaIC2020.1/plugins/jp.sourceforge.mergedoc.pleiades/pleiades.jar
+#javaagent:/Applications/IntelliJ\ IDEA\ CE.app/Contents/plugins/jp.sourceforge.mergedoc.pleiades/pleiades.jar
+〜備忘〜
+http://www.torutk.com/projects/swe/wiki/IntelliJ_IDEA_Community_Edition%E3%82%BB%E3%83%83%E3%83%88%E3%82%A2%E3%83%83%E3%83%97
+IntelliJ IDEA 2020.1から、公式の日本語リソース（Japanese Language Pack）が適用できるようになる
+従来のIntelliJ IDEAの日本語化に用いてきた Pleiadesプラグイン（AOPツール）は、2020.1以降では非推奨となる
+#日本語リソース（2020.1以降）
+Pluginから、Japanese Language Packを選択してインストール
+#Pleiades（2019まで）
+Pleiades と呼ばれる、実行時に動的に処理を付加して日本語化するagentコードを使用すると日本語化することが可能
+〜備忘ここまで〜
