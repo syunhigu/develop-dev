@@ -1,0 +1,69 @@
+#phpenvインストール
+brew install phpenv
+※brewではうまく行かないため、githubからインストール
+git clone https://github.com/CHH/phpenv.git
+phpenv/bin/phpenv-install.sh
+#.bash_profileに追記及び反映
+vi .bash_profile
+export PATH="$HOME/.phpenv/bin:$PATH"
+eval "$(phpenv init -)"
+source .bash_profile
+#php-buildインストール
+git clone https://github.com/CHH/php-build.git $HOME/.phpenv/plugins/php-build
+#インストール可能なバージョンを確認
+phpenv install --list
+#事前にインストールするもの
+※phpenvでインストールする際に色々足りないと出るので、Homebrew経由で、以下をインストール
+brew install re2c
+brew install openssl
+brew install bison
+brew install libxml2
+brew install autoconf
+brew install automake
+brew install icu4c
+brew install libjpeg
+brew install libpng
+brew install libmcrypt
+brew install bzip2 libiconv zlib curl
+brew install bison@2.7
+echo 'export PATH="/usr/local/opt/bison@2.7/bin:$PATH"' >> ~/.bash_profile
+#default_configure_options環境に合わせ適宜修正
+vi .phpenv/plugins/php-build/share/php-build/default_configure_options
+〜内容〜
+--without-pear
+--with-gd
+--enable-sockets
+# jpeg-dirの変更
+--with-jpeg-dir=/usr/local/opt/libjpeg
+# png-dirの変更
+--with-png-dir=/usr/local/opt/libpng
+--enable-exif
+--enable-zip
+--with-zlib
+# zlib-dirの変更
+--with-zlib-dir=/usr/local/opt/zlib
+# bz2-dirの指定
+--with-bz2=/usr/local/opt/bzip2
+--enable-intl
+--with-kerberos
+--with-openssl
+--enable-soap
+--enable-xmlreader
+--with-xsl
+--enable-ftp
+--enable-cgi
+# curl-dirの指定
+--with-curl=/usr/local/opt/curl
+# tidy-dirの指定
+--with-tidy=/usr/local/opt/tidy-html5
+--with-xmlrpc
+--enable-sysvsem
+--enable-sysvshm
+〜内容ここまで〜
+#任意のバージョンをインストール
+phpenv install 7.3.17
+※PHP7.3は --without-libzip オプションが無いとmac内のlibzipライブラリを探す為、付属のlibzipを利用するようオプションを付与する必要があります。
+エラー内容
+configure: error: Please reinstall libedit - I cannot find readline.h
+コマンド
+PHP_BUILD_CONFIGURE_OPTS="--with-libedit=$(brew --prefix libedit)" phpenv install -v 7.3.17
