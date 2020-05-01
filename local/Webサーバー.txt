@@ -1,0 +1,15 @@
+#元から入っているapache停止
+sudo apachectl stop
+sudo launchctl unload -w /System/Library/LaunchDaemons/org.apache.httpd.plist
+#apache検索
+brew search httpd
+#apacheインストール
+brew install httpd
+#apache conf
+vi /usr/local/etc/httpd/httpd.conf
+#apacheドキュメントルート
+/usr/local/var/www
+#apache起動
+sudo brew services start httpd
+#apache停止
+sudo brew services stop httpd

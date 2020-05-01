@@ -1,0 +1,136 @@
+#postgresqlインストール
+brew search postgresql
+brew install postgresql
+#postgresql起動
+brew services start postgresql
+#postgresql停止
+brew services stop postgresql
+#postgresqlバージョン確認
+psql --version
+#postgresqlログイン
+psql postgres
+#ロール（ユーザー）作成
+create role user with login password 'xxxxxxxxxx';
+#スーパーユーザー権限指定
+create role user with superuser login password 'xxxxxxxxxx';
+#DB作成、ロール作成権限指定
+create role user with createdb createrole login password 'xxxxxxxxxx';
+#ロール一覧表示
+\du
+#ロールの属性変更
+alter role user with ${option}
+※指定できるoption
+superuser | nosuperuser
+createdb | nocreatedb
+inherit | noinherit
+login | nologin
+replication | noreplication
+bypassrls | nobypassrls
+connection limit connlimit
+password 'xxxxxxxxxx'
+valid until 'timestamp'
+※例
+ロール作成権限削除、最大同時接続数を3に変更
+alter role momo with nocreaterole connection limit 3;
+接続ユーザー（自分）のパスワード変更
+alter role session_user with password 'xxxxxxxxxx';
+#ロールの名前変更
+alter role name rename to new_name;
+※ロール名が変更されるとMD5パスワードがクリアされるため、パスワード設定すること
+alter role new_name with password 'xxxxxxxxxx';
+#ロールに権限追加
+grant 権限 on 対象 to ロール
+※設定できる権限
+select：テーブルやビューに対してデータを取得できる
+      　update や delete をするためにも必要
+insert：テーブルに新しいデータを追加できる
+update：テーブルのデータを更新できる
+delete：テーブルからデータを削除できる
+truncate：テーブルのデータを空にできる
+references：テーブルやカラムに対して外部キー制約を作成できる
+trigger：テーブルでトリガを作成できる
+create：対象がデータベースの場合、スキーマを作成できる
+      　対象がスキーマの場合、テーブルなどのオブジェクトを作成できる
+connect：指定のデータベースに接続できる
+temporary：データベース内に一時テーブルを作成できる
+execute：関数またはプロシージャ、演算子の使用を許可する
+usage：対象がスキーマの場合、オブジェクトへのアクセスを許可する
+     　対象がそれ以外の場合、対象に応じた権限が付与される
+all privileges：利用可能な権限をまとめて許可する
+※「対象」はテーブル、テーブルのカラム、データベース、スキーマ、など
+※例
+role_name ロールにテーブル table_name を対象として select と insert の権限を追加
+grant select, insert on table_name to role_name;
+role_name ロールにテーブル table_name を対象として全ての権限を追加
+（すべての権限というのは、この書式で指定できる select、insert、update、delete、truncate、references、trigger）
+grant all privileges on table_name to role_name;
+role_name ロールに指定したスキーマ schema_name に含まれるすべてのテーブルを対象として select の権限を追加
+grant select on all tables in schema schema_name to role_name;
+role_name ロールにテーブル table_name を対象として select と insert の権限を追加し、また他のユーザーに対して同じ権限を付与できるようにする
+grant select, insert on table_name to role_name with grant option;
+#権限の削除
+revoke 権限 on 対象 from ロール
+テーブルに対する権限を削除する
+※例
+role_name ロールからテーブル table_name を対象として select と insert の権限を削除
+revoke select, insert on table_name from role_name;
+role_name ロールからテーブル table_name を対象として select の権限を他のロールに追加する権限だけを削除
+revoke grant option for select on table_name from role_name;
+role_name ロールからテーブル table_name を対象として select の権限を削除し、また role_name ロールが他のロールに追加した select 権限も同時に削除
+revoke select on table_name from role_name cascade;
+role_name ロールからテーブル table_name を対象として全ての権限を削除
+revoke all privileges on table_name from role_name;
+#指定のロールが所有するオブジェクトの所有権を別のロールに変更する
+#オブジェクトの所有権を別のロールに変更する
+reassign owned by old_role to new_role
+#指定のロールがデータベースの中で所有するオブジェクトをまとめて削除する
+#指定のロールが所有するオブジェクトを削除
+drop owned by name [cascade | restrict]
+※cascade を付けた場合には削除するオブジェクトに依存するオブジェクト、そしてそれらのオブジェクトに依存するすべてのオブジェクトを自動的に削除
+retrict を付けた場合には削除するオブジェクトに依存する他のデータベースがオブジェクトがあった場合には削除を中止する
+明示的に指定しなかった場合は restrict を付けたものとして扱われる
+#ロールを削除する
+drop role [if exists] name
+#グループとして使用するロールのメンバ資格を他のロールへ付与または削除する
+#ロールのメンバ資格を指定のロールに付与する
+grant role_name_g [, ...] to role_name [, ...] [ with admin option ]
+※グループととして利用しているロール( role_name_g )のメンバ資格をロール( role_name )に与える
+スーパーユーザーはどのロールに対しても実行でき、 createrole 権限を持つロールは、スーパーユーザー以外のロールに対して実行できる
+またメンバとしてロールに追加されるときに with admin option が付けられていた場合には、他のロールに対してメンバ資格を付与する権限が与えられる
+スーパーユーザーはどのロールに対しても実行でき、 createrole 権限を持つロールは、スーパーユーザー以外のロールに対して実行できる
+またメンバとしてロールに追加されるときに with admin option が付けられていた場合には、他のロールに対してメンバ資格を削除する権限が与えられる
+#ロールのメンバ資格を指定のロールから削除する
+revoke [ admin option for ] role_name_g [, ...] from role_name [, ...] [ CASCADE | RESTRICT ]
+※グループととして利用しているロール( role_name_g )のメンバ資格をロール( role_name )から削除する
+admin option for が付けて実行した場合にはメンバ資格ではなく他のロールにメンバ資格を付与したり削除したりする権限だけが削除される
+スーパーユーザーはどのロールに対しても実行でき、 createrole 権限を持つロールは、スーパーユーザー以外のロールに対して実行できる
+またメンバとしてロールに追加されるときに with admin option が付けられていた場合には、他のロールに対してメンバ資格を削除する権限が与えられる
+#メンバとして属しているロールが持つ権限を継承する
+#メンバとなったロールの権限を自動で継承するかどうか
+ロールが作成された時に inherit が指定されていると、そのロールが別のロールのメンバとなった時にそのロールが持つ権限を自動で継承する
+create role name [ [ with ] option [ ... ] ]
+option:inherit | noinherit | login | nologin | [ encrypted ] password 'password'
+※inherit を指定した場合は権限を継承し、 noinherit を指定した場合は権限を自動では継承しない
+この設定を省略した場合には inherit が設定されたものと見なされますので明示的に指定せずに作成されたロールはメンバとなったロールの権限を継承する
+また作成済みのロールに対しては alter role コマンドで変更することもできる
+alter role role_name [ with ] option [ ... ]
+option:inherit | noinherit
+#一時的に別のロールになり替わる
+#別のロールになり替わる
+set [ session | local ] role role_name
+※なり替われるロールは自分がメンバとして属しているロールのみ
+コマンド実行時に session を指定した場合は現在のセッションの間だけ有効となり、 
+local を指定した場合は現在のトランザクションの間だけ有効となる
+別のロールになり替わると、なり替わったロールの権限を受け継ぐ
+逆に本来のロールに与えられていた権限は削除されますので注意
+省略した場合は session が指定されたものとして扱われる
+#別のロールへのなり替わりをリセットする
+※どちらの書式を使用してもなり替わりをリセットすることができる
+set [ session | local ] role none
+reset role
+#テーブル、ビュー、シーケンスの一覧をアクセス権限と一緒に表示する
+\dp
+#スキーマ一覧表示
+\dn
+#テーブル表示
+\dt

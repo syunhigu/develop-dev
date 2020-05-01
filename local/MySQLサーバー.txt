@@ -1,0 +1,47 @@
+#mysqlインストール
+brew search mysql
+brew install mysql
+※下記は必要に応じてやってもやらなくてもok
+brew install mysql@5.7
+brew link mysql@5.7
+#mysql起動
+mysql.server start
+#mysqlログイン
+mysql -u root -p
+#mysql停止
+mysql.server stop
+#mysql.userのカラムを表示
+show columns from mysql.user;
+#ユーザー及びパスワードハッシュ取得
+select host,user,authentication_string from mysql.user;
+#ユーザーの権限確認
+show grants for root@localhost;
+#ユーザー作成
+CREATE USER 'user'@'localhost' identified by 'pass';
+#権限付与
+GRANT ALL ON *.* TO user@localhost;
+#ユーザー作成及び権限付与
+GRANT 権限 ON データベース.テーブル TO 'ユーザ'@'ホスト' identified by 'パスワード';
+#例1)「sampleDB」の全テーブルに対する全ての権限を付与
+GRANT ALL ON sampleDB.* TO user@localhost identified by 'pass'; 
+#例2)「sampleDB」の「sampleTABLE」に対するSELECT文、INSERT文、UPDATE文、DELETE文の実行権限を付与
+GRANT SELECT,INSERT,UPDATE,DELETE ON sampleDB.sampleTABLE TO user@localhost identified by 'pass'; 
+#作成したユーザの権限を確認
+show grants for user@localhost
+#パスワードポリシー変更
+#パスワードポリシー表示
+SHOW VARIABLES LIKE 'validate_password%';
+#文字列の長さを変更
+set global validate_password.length=6;
+#ポリシーを変更
+set global validate_password.policy=LOW;
+※MySQL設定変更の場合
+#my.cnfにvalidate-password=OFFを追記
+sudo vi /etc/my.cnf
+[mysqld]
+validate-password=OFF
+sudo systemctl restart mysqld.service
+#データベース作成
+create database mydb;
+#データベースの情報を確認
+select SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME, DEFAULT_COLLATION_NAME from INFORMATION_SCHEMA.SCHEMATA where SCHEMA_NAME = 'mydb2';
