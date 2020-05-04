@@ -72,3 +72,6 @@ php -vphpenv install 7.3.17
 configure: error: Please reinstall libedit - I cannot find readline.h
 コマンド
 PHP_BUILD_CONFIGURE_OPTS="--with-libedit=$(brew --prefix libedit)" phpenv install -v 7.3.17
+#PHP 7.4系に切り替える場合
+brew install autoconf bzip2 icu4c krb5 libedit libiconv libjpeg libpng libxml2 libzip oniguruma openssl@1.1 pkg-config tidy-html5
+PKG_CONFIG_PATH="/usr/local/opt/krb5/lib/pkgconfig:/usr/local/opt/icu4c/lib/pkgconfig:/usr/local/opt/libedit/lib/pkgconfig:/usr/local/opt/libjpeg/lib/pkgconfig:/usr/local/opt/libpng/lib/pkgconfig:/usr/local/opt/libxml2/lib/pkgconfig:/usr/local/opt/libzip/lib/pkgconfig:/usr/local/opt/oniguruma/lib/pkgconfig:/usr/local/opt/openssl@1.1/lib/pkgconfig:/usr/local/opt/tidy-html5/lib/pkgconfig" PHP_BUILD_CONFIGURE_OPTS="--with-bz2=/usr/local/opt/bzip2 --with-iconv=/usr/local/opt/libiconv" phpenv install 7.4.5
