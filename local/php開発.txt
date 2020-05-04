@@ -64,6 +64,7 @@ vi .phpenv/plugins/php-build/share/php-build/default_configure_options
 #PHP 7.1.4に切り替える場合
 source .bash_profile
 phpenv global 7.1.4
+phpenv local 7.1.4
 phpenv rehash
 php -vphpenv install 7.3.17
 ※PHP7.3は --without-libzip オプションが無いとmac内のlibzipライブラリを探す為、付属のlibzipを利用するようオプションを付与する必要があります。
