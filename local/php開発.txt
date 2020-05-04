@@ -12,6 +12,8 @@ source .bash_profile
 git clone https://github.com/CHH/php-build.git $HOME/.phpenv/plugins/php-build
 #インストール可能なバージョンを確認
 phpenv install --list
+#インストール済みのバージョン一覧
+phpenv versions
 #事前にインストールするもの
 ※phpenvでインストールする際に色々足りないと出るので、Homebrew経由で、以下をインストール
 brew install re2c
