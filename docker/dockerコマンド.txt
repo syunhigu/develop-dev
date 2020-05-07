@@ -51,3 +51,5 @@ docker run -it -d -p 8181:80 --name original-nginx original-nginx
 docker exec -it original-nginx bash
 #Nginxがインストールされていることを確認
 nginx -v
+#作成したイメージからローカルフォルダマウント、コンテナ作成及び起動
+docker run -it -d -p 8282:80 -v /Users/syunhigu/docker_test:/docker_test --name docker_test original-nginx
