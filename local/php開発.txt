@@ -1,3 +1,35 @@
+#phpbrewインストール、初期化、bashの設定
+curl -L -O https://github.com/phpbrew/phpbrew/releases/latest/download/phpbrew.phar
+chmod +x phpbrew.phar
+sudo mv phpbrew.phar /usr/local/bin/phpbrew
+phpbrew init
+echo 'source ~/.phpbrew/bashrc' >> ~/.bashrc
+sudo mkdir -p /opt/phpbrew
+phpbrew init --root=/opt/phpbrew
+phpbrew lookup-prefix homebrew
+#インストール出来るバージョン一覧を確認
+phpbrew known
+#指定バージョンのインストール
+phpbrew install [バージョン] +default
+#7.3系のインストール
+phpbrew install 7.3.17 +default
+#足りないソフトウェア（does not exist.）をbrew installコマンドでまとめてインストール
+brew install libxml2 bzip2 mhash curl
+#エラー内容
+configure: error: zip support requires ZLIB. Use --with-zlib-dir=<DIR> to specify prefix where ZLIB include and library are located
+※参考
+https://qiita.com/martini3oz/items/30a42f96f78c13b6eca4
+#インストールコマンド
+phpbrew install 7.2 +default +dbs +openssl=/usr/local/opt/openssl +bz2="$(brew --prefix bzip2)" +zlib="$(brew --prefix zlib)"
+phpbrew install 7.3.17 +default +dbs +openssl=/usr/local/opt/openssl +bz2="$(brew --prefix bzip2)" +zlib="$(brew --prefix zlib)"
+#listコマンドで一覧を確認
+phpbrew list
+#一時的に切り替え
+phpbrew use 7.2.3
+#永続的に切り替える
+phpbrew switch 7.2.3
+
+-------------------------------------------------------
 #phpenvインストール
 brew install phpenv
 ※brewではうまく行かないため、githubからインストール
