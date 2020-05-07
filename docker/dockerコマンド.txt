@@ -52,4 +52,33 @@ docker exec -it original-nginx bash
 #Nginxがインストールされていることを確認
 nginx -v
 #作成したイメージからローカルフォルダマウント、コンテナ作成及び起動
-docker run -it -d -p 8282:80 -v /Users/syunhigu/docker_test:/docker_test --name docker_test original-nginx
+docker run -it -d -p 8282:80 -v /Users/syunhigu/docker/base:/home/base --name docker-base original-nginx
+※「--privileged」を指定しないと「systemctl」コマンドが正常に動作しない
+docker run -it -d --privileged -p 8282:80 -v /Users/syunhigu/docker/base:/home/base --name docker-base original-nginx
+
+#「docker-base」コンテナにログイン
+docker exec -it docker-base bash
+#sudoを実行できるユーザー作成
+useradd app
+useradd admin
+#パスワード設定
+passwd app
+passwd admin
+→password
+#グループ「wheel」にユーザーを加える
+※wheelグループは全てのコマンドが実行可能なグループ
+usermod -G wheel admin
+#ユーザー切り替え
+su - admin
+
+#各種必要な設定
+yum -y update
+yum -y install vim
+yum -y install firewalld
+yum -y install httpd httpd-devel mod_ssl
+yum -y install mlocate
+updatedb
+yum -y install wget
+#ファイアウォールの設定
+#起動
+systemctl start firewalld
