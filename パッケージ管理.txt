@@ -48,10 +48,14 @@ mas uninstall (package ID)
 #アップデートがあるパッケージ一覧
 brew outdated
 brew cask outdated
+brew cask upgrade --dry-run `brew cask list`
 mas outdated
 #パッケージのアップデート
 brew upgrade
 brew cask upgrade
+※下記のWarningが出てしまった場合
+Warning: Calling brew cask upgrade is deprecated! Use brew upgrade --cask instead.
+brew upgrade --cask --greedy
 mas upgrade
 #インストール済みパッケージ一覧
 brew list
@@ -62,8 +66,14 @@ brew doctor
 ※You have unlinked kags in your Cellarと表示されたらリンクを修正
 brew unlink (package name)
 brew link (package name)
+※下記のoverwriteでも可能
+brew link --overwrite (package name)
 brew cleanup
-
+※下記のconfigのWarningが出た場合は「.bash_profile」にaliasを追記する
+Warning: "config" scripts exist outside your system or Homebrew directories.
+参考：https://qiita.com/takuya0301/items/695f42f6904e979f0152
+alias brew="PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin brew"
+※「export PATH=xxxx」より前に記述すること
 #環境移行
 #Brawfileの生成
 brew bundle dump
