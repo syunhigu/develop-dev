@@ -38,6 +38,8 @@ nginx
 
 #起動中のコンテナを確認
 docker ps
+#すべてのコンテナ表示
+docker ps -a
 #Dockerコンテナを起動
 docker start centos
 #Dockerコンテナを停止
