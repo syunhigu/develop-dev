@@ -53,3 +53,14 @@ docker run -it -d -p 8181:80 --name original-nginx original-nginx
 docker exec -it original-nginx bash
 #Nginxがインストールされていることを確認
 nginx -v
+
+#nginxコンテナをダウンロード及び起動する
+docker pull docker.io/nginx
+#-p：ポートフォワードを行う
+※Dockerホストマシンの8000番ポートが、nginx-latestコンテナの80番ポートにつながる
+docker run -d -p 8000:80 --name nginx-latest docker.io/nginx:latest
+#nginxコンテナにアクセス確認してみる
+curl http://localhost:8000/index.html
+#nginxログの確認
+-fをつけることでtail- fのような見方ができる
+docker logs -f nginx-latest
