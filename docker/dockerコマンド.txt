@@ -64,3 +64,20 @@ curl http://localhost:8000/index.html
 #nginxログの確認
 -fをつけることでtail- fのような見方ができる
 docker logs -f nginx-latest
+
+＃Nginxのイメージをダウンロード
+docker pull nginx
+#nginxの起動
+docker run --name [コンテナ名] -d -p [ホスト側のポート番号]:[コンテナ側のポート番号] [イメージ名]
+–name で　任意のコンテナ名を指定。-d はコンテナをバックグラウンドで実行。-p はコンテナのポートに、ホストのポートからアクセスできるようにする。
+docker run --name nginx00 -d -p 8080:80 nginx:latest
+#ブラウザからアクセス
+http://localhost:8080
+#フォルダマウント
+「-v」はコンテナにボリュームを割り当てる
+「/Users/ユーザー名/web:/usr/share/nginx/html:ro」の「/Users/ユーザー名/web」がホスト側（ローカルpc）のパス、
+「/usr/share/nginx/html」が Dcoker の Nginx 側のパス。
+よってホストの「/usr/share/nginx/html」に置かれるファイル群は、
+あたかも「/usr/share/nginx/html」に置かれたかのように機能する。
+ちなみに「ro」というのはリードオンリー（つまり）読み取り専用であることを示す。
+docker run --name hello-nginx -v /Users/ユーザー名/web:/usr/share/nginx/html:ro -d -p 8080:80 nginx
