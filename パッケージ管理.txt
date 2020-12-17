@@ -52,7 +52,7 @@ brew cask upgrade --dry-run `brew cask list`
 mas outdated
 #パッケージのアップデート
 brew upgrade
-brew cask upgrade
+brew upgrade --cask
 ※下記のWarningが出てしまった場合
 Warning: Calling brew cask upgrade is deprecated! Use brew upgrade --cask instead.
 brew upgrade --cask --greedy
