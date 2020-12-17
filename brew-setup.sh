@@ -8,19 +8,18 @@ brew install zsh-completions
 brew install python-yq
 brew install docker-machine
 #cask
-brew cask install google-chrome
-brew cask install sourcetree
-brew cask install visual-studio-code
-brew cask install firefox
-brew cask install skype
-brew cask install dropbox
-brew cask install google-backup-and-sync
-brew cask install gpg-suite
-brew cask install github
-brew cask install microsoft-office
-brew cask install tunnelblick
-brew cask install macdown
-brew cask install drawio
-brew cask install docker
-brew cask install virtualbox
-
+brew install --cask google-chrome
+brew install --cask sourcetree
+brew install --cask visual-studio-code
+brew install --cask firefox
+brew install --cask skype
+brew install --cask dropbox
+brew install --cask google-backup-and-sync
+brew install --cask gpg-suite
+brew install --cask github
+brew install --cask microsoft-office
+brew install --cask tunnelblick
+brew install --cask macdown
+brew install --cask drawio
+brew install --cask docker
+brew install --cask virtualbox
