@@ -7,6 +7,7 @@ brew install zsh
 brew install zsh-completions
 brew install python-yq
 brew install docker-machine
+brew install mutagen-io/mutagen/mutagen
 #cask
 brew install --cask google-chrome
 brew install --cask sourcetree
