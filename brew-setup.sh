@@ -23,3 +23,4 @@ brew install --cask macdown
 brew install --cask drawio
 brew install --cask docker
 brew install --cask virtualbox
+brew install --cask vagrant
