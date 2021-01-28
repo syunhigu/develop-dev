@@ -2,11 +2,8 @@
 
 #インストール一覧
 brew install git
-brew install svn
-brew install zsh
 brew install zsh-completions
 brew install docker-machine
-brew install zsh-completions
 #cask
 brew install --cask google-chrome
 brew install --cask sourcetree
