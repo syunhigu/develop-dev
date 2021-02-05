@@ -32,3 +32,7 @@ docker-compose ps
 docker-compose stop
 #コンテナ削除
 docker-compose rm
+#停止、削除、ネットワーク削除を全て実行
+docker-compose down
+#イメージも合わせて削除
+docker-compose down --rmi all
