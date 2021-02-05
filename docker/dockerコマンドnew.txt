@@ -28,3 +28,7 @@ cd <docker-compose.ymlが置かれているディレクトリ>
 docker-compose up -d
 #起動確認
 docker-compose ps
+#コンテナ停止
+docker-compose stop
+#コンテナ削除
+docker-compose rm
