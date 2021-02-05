@@ -1,8 +1,30 @@
 brew cask install docker
 brew install docker-machine
 brew cask install virtualbox
+brew install docker-compose
 
 docker-machine rm default
 docker-machine create --driver virtualbox default
 eval "$(docker-machine env default)"
 docker run -d -p 8080:80 --name webserver nginx
+
+----------------------------------------
+#docker-composeでの構築
+docker run --name mysql -e MYSQL_ROOT_PASSWORD=yutsuki55 -d mysql:5.7
+docker run --name wordpress -e WORDPRESS_DB_PASSWORD=yutsuki55 --link mysql:mysql -d -p 8080:80 wordpress
+
+#docker-compose.yml作成
+touch docker-compose.yml
+
+#コマンドのオプションとdocker-compose.ymlを比較
+設定内容        　　　　docker run コマンド  docker-compose.yml
+コンテナ名      　　　　--name  　　　　　　　container_name
+環境変数　　　　　 　　　-e　　　　　　　　　　 environment
+ポートフォワード 　　　　-p　　　　　　　　　　 ports
+使用するDockerイメージ  コマンドの最後　　　　 image
+
+cd <docker-compose.ymlが置かれているディレクトリ>
+#コンテナ起動
+docker-compose up -d
+#起動確認
+docker-compose ps
