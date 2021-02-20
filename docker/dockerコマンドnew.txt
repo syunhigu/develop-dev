@@ -26,6 +26,7 @@ touch docker-compose.yml
 cd <docker-compose.ymlが置かれているディレクトリ>
 #コンテナ起動
 docker-compose up -d
+※-dオプションはバックグラウンドで実行
 #起動確認
 docker-compose ps
 #コンテナ停止
