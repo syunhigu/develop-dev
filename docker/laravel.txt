@@ -1,0 +1,624 @@
+docker laravel環境構築
+※参考
+【超入門】20分でLaravel開発環境を爆速構築するDockerハンズオン
+https://qiita.com/ucan-lab/items/56c9dc3cf2e6762672f4
+最強のLaravel開発環境をDockerを使って構築する
+https://qiita.com/ucan-lab/items/5fc1281cd8076c8ac9f4
+
+#作業ディレクトリを作成
+mkdir laravel
+★★★最終的なディレクトリ構成★★★
+.
+├── README.md (この名前にするとGitHubで見た時にHTMLに変換して表示してくれる)
+├── infra (*1)
+│   ├── mysql (*1)
+│   │   ├── Dockerfile
+│   │   └── my.cnf (*1)
+│   ├── nginx (*1)
+│   │   └── default.conf (*1)
+│   └── php (*1)
+│       ├── Dockerfile (この名前にするとファイル名の指定を省略できる)
+│       └── php.ini (*1)
+├── docker-compose.yml (この名前にするとファイル名の指定を省略できる)
+└── backend (*1)
+    └── Laravelをインストールするディレクトリ
+(*1) 任意の名前に変更してもok
+★★★最終的なディレクトリ構成★★★
+#README.md作成
+echo "# docker-laravel" >> README.md
+
+アプリケーションサーバ(app)コンテナを作る
+Docker Hub php
+https://hub.docker.com/_/php
+サポートしてるバージョン
+https://github.com/docker-library/docs/blob/master/php/README.md#supported-tags-and-respective-dockerfile-links
+nginx と PHP-FPM の仕組みをちゃんと理解しながら PHP の実行環境を構築する
+https://qiita.com/kotarella1110/items/634f6fafeb33ae0f51dc
+★★★ディレクトリ構成★★★
+.
+├── infra
+│   └── php
+│       ├── Dockerfile
+│       └── php.ini # PHPの設定ファイル
+├── backend # Laravelをインストールするディレクトリ
+└── docker-compose.yml
+★★★ディレクトリ構成★★★
+
+#docker-compose.yml を作成する
+touch docker-compose.yml
+※docker-compose.yml ファイルはインデント(半角スペース)が意味を持つ
+#docker-compose.yml: 設定値の補足
+version: "3.8"
+通常はメジャー番号とマイナー番号を両方指定する
+マイナーバージョンを指定しない場合はデフォルト0が使用される
+https://matsuand.github.io/docs.docker.jp.onthefly/compose/compose-file/compose-versioning/
+#下記は同じ指定になる
+version: "3"
+version: "3.0"
+#サービス名に app (アプリケーションサーバー)の名前を付けて定義する
+services:
+  app: # => サービス名は任意
+    build: ./infra/php
+    volumes:
+      - ./backend:/work
+
+build: で指定しているのはビルドコンテキストを指定する
+ビルドコンテキストとは、docker buildを実行する際の現在の作業ディレクトリのことをビルドコンテキスト(build context)と呼ぶ
+Dockerfile が置かれている ./infra/php ディレクトリをビルドコンテキストとして指定する
+Dockerビルドの際は Dockerfile のファイルを探すので、ファイル名の指定は不要
+volumes: ではホスト側のディレクトリや名前付きボリュームをコンテナ側へマウントしたい時に指定する
+ホスト側の ./backend ディレクトリをappサービスのコンテナ内 /work へマウントしている
+#./docker/php/Dockerfile を作成する
+mkdir -p infra/php
+touch infra/php/Dockerfile
+・Composerコマンドのインストール
+・Laravelで必要なPHP拡張機能のインストール
+・bcmath, pdo_mysql が不足しているので追加インストール
+#./docker/php/Dockerfile: 設定値の補足
+FROM php:7.4-fpm-buster
+FROM命令はイメージビルドのためのベースイメージを設定する
+FROM イメージ名:タグ名 で指定する
+https://matsuand.github.io/docs.docker.jp.onthefly/engine/reference/builder/#from
+php | Docker Hub公式イメージ
+https://hub.docker.com/_/php
+PHP拡張ライブラリのインストール方法
+https://hub.docker.com/_/php/#how-to-install-more-php-extensions
+PECL拡張ライブラリのインストール方法
+https://hub.docker.com/_/php/#pecl-extensions
+
+SHELL ["/bin/bash", "-oeux", "pipefail", "-c"]
+https://matsuand.github.io/docs.docker.jp.onthefly/engine/reference/builder/#shell
+SHELL命令は何も指定しない場合は SHELL ["/bin/sh", "-c"] がデフォルト値となります(Linuxの場合)
+パイプ中のあらゆる段階でエラーがあれば失敗とするため、pipefailオプションを明示的に指定する
+-o オプションはオプションを設定するためのオプション
+-e オプションを定義しておくと、そのシェルスクリプト内で何らかのエラーが発生した時点で、それ以降の処理を中断できる
+-u オプションを定義しておくと、未定義の変数に対して読み込み等を行おうとした際にエラーとなる
+-x オプションを定義しておくと、実行したコマンドを全て標準エラー出力に出してくれる
+おまじないと思ってもらえればok。SHELL命令は必須ではない
+
+ENV COMPOSER_ALLOW_SUPERUSER=1 \
+  COMPOSER_HOME=/composer
+https://matsuand.github.io/docs.docker.jp.onthefly/engine/reference/builder/#env
+ENV命令はコンテナ内のサーバー環境変数を設定する
+
+COPY --from=composer:1.10 /usr/bin/composer /usr/bin/composer
+https://matsuand.github.io/docs.docker.jp.onthefly/engine/reference/builder/#copy
+
+RUN apt-get update && \
+  apt-get -y install git unzip libzip-dev libicu-dev libonig-dev && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/* && \
+  docker-php-ext-install intl pdo_mysql zip bcmath
+https://matsuand.github.io/docs.docker.jp.onthefly/engine/reference/builder/#run
+Debian系のパッケージ管理ツールは apt-get, apt とあるがDockerfile内で aptを実行するとCLIインターフェース向けではないと警告が表示されるため、apt-getを使用する
+apt-get update インストール可能なパッケージの「一覧」を更新する
+実際のパッケージのインストール、アップグレードなどは行わない
+apt-get -y install xxx Laravelのインストールに必要なパッケージをインストールする
+下記のパッケージをインストールしておけばok
+・https://packages.debian.org/ja/sid/git
+・https://packages.debian.org/ja/sid/unzip
+・https://packages.debian.org/ja/sid/libzip-dev
+・https://packages.debian.org/ja/sid/libicu-dev
+・https://packages.debian.org/ja/sid/libonig-dev
+
+apt-get clean && rm -rf /var/lib/apt/lists/*
+ここはパッケージインストールで使用したキャッシュファイルを削除する
+
+phpの公式Dockerイメージには、docker-php-ext-install, docker-php-ext-enable, docker-php-ext-configure のPHP拡張ライブラリを簡単に利用するための便利コマンドが予め用意されている
+docker-php-ext-install intl pdo_mysql zip bcmath PHPの拡張ライブラリをインストールしている
+・https://www.php.net/manual/ja/book.intl.php
+・https://www.php.net/manual/ja/ref.pdo-mysql.php
+・https://www.php.net/manual/ja/book.zip.php
+・https://www.php.net/manual/ja/book.bc.php
+
+COPY ./php.ini /usr/local/etc/php/php.ini
+https://matsuand.github.io/docs.docker.jp.onthefly/engine/reference/builder/#copy
+
+WORKDIR /work
+https://matsuand.github.io/docs.docker.jp.onthefly/engine/reference/builder/#workdir
+
+#./docker/php/php.ini を作成する
+touch infra/php/php.ini
+php.ini はPHPの設定ファイル
+・PHPエラーメッセージの設定
+・PHPエラーログの設定
+・メモリ等の設定(お好みで)
+・タイムゾーン設定
+・文字コード設定
+php.net ini.core.php
+https://www.php.net/manual/ja/ini.core.php
+php.net mbstring.configuration
+https://www.php.net/manual/ja/mbstring.configuration.php
+PHP7.4 ぼくのかんがえたさいきょうのphp.ini
+https://qiita.com/ucan-lab/items/0d74378e1b9ba81699a9
+
+#build & up
+・appコンテナの作成
+・PHPのバージョン確認
+・Laravelで必要なPHP拡張機能の確認
+docker-compose up -d --build
+docker-compose コマンドは docker-compose.yml があるディレクトリで実行します。
+docker-compose up は docker-compose.yml に定義したサービスを起動します。
+-d 「デタッチド」モードでコンテナを起動する
+デフォルトは「アタッチド」モードで全てのコンテナログを画面上に表示
+「デタッチド」モードではバックグラウンドで動作
+--build コンテナの開始前にイメージを構築する
+特に変更がない場合はキャッシュが使用される
+
+#コンテナ一覧を表示
+docker-compose ps
+★★★実行結果★★★
+$ docker-compose ps
+    Name                   Command              State    Ports  
+----------------------------------------------------------------
+laravel_app_1   docker-php-entrypoint php-fpm   Up      9000/tcp
+★★★実行結果★★★
+laravel_app_1 コンテナの State が Up になっていたら正常に起動している状態
+・Name: コンテナ名
+・Command: 最後に実行されたコマンド
+・State: 状態(Up)はコンテナが起動している状態
+・Ports: 9000/tcp(コンテナのポート)
+・9000番のホストポートは公開されていないので、コンテナの外からはアクセスできない
+
+#appコンテナ内ミドルウェアのバージョン確認(コンテナに入ってコマンド実行)
+作成したappコンテナの中に入ってPHP, Composerのバージョン、インストール済みの拡張機能を確認
+Laravel 7.xのサーバ要件に必要な拡張機能が入っていることを確認する
+Laravel 7.xのサーバ要件
+https://readouble.com/laravel/7.x/ja/installation.html
+
+#appコンテナログイン
+docker-compose exec app bash
+# PHPのバージョン確認
+php -v
+# Composerのバージョン確認
+composer -V
+# インストール済みの拡張機能の一覧
+php -m
+#コンテナログアウト
+exit
+※control + d でもコンテナから出られる
+
+補足説明
+・docker-compose exec 実行中のコンテナ内で、コマンドを実行する
+・app サービス名(コンテナ名)を指定する
+
+PHPのバージョン確認(コンテナの外からコマンド実行)
+コンテナの外から php コマンドを実行することもできる
+docker-compose exec [サービス名] [実行したいコマンド]
+docker-compose exec app php -v
+★★★実行結果★★★
+$ docker-compose exec app php -v
+PHP 7.4.15 (cli) (built: Feb  9 2021 19:48:41) ( NTS )
+Copyright (c) The PHP Group
+Zend Engine v3.4.0, Copyright (c) Zend Technologies
+★★★実行結果★★★
+
+#ウェブサーバー(web)コンテナを作る
+nginxウェブサーバーコンテナを作成する
+nginxのベースイメージをそのまま利用する
+Docker Hub nginx
+https://hub.docker.com/_/nginx
+
+ディレクトリ構成
+.
+├── infra
+│   └── nginx
+│       └── default.conf # nginxの設定ファイル
+├── backend
+│  └── public # 動作確認用に作成
+│       ├── index.html # HTML動作確認用
+│       └── phpinfo.php # PHP動作確認用
+└─── docker-compose.yml
+
+docker-compose.yml へ追記する
+・ポート転送の設定(今回は10080ポートにする)
+・タイムゾーンの設定
+★★★追記内容★★★
+version: "3.8"
+services:
+  app:
+    build: ./infra/php
+    volumes:
+      - ./backend:/work
+
+  # 追記
+  web:
+    image: nginx:1.18-alpine
+    ports:
+      - 10080:80
+    volumes:
+      - ./backend:/work
+      - ./infra/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    working_dir: /work
+★★★追記内容★★★
+・docker-compose.yml ファイルはインデント(半角スペース)が意味を持つ
+・app コンテナの設定と同じインデントレベルで貼り付ける
+
+docker-compose.yml: 設定値の解説
+    image: nginx:1.18-alpine
+https://matsuand.github.io/docs.docker.jp.onthefly/compose/compose-file/#image
+コンテナを起動させるイメージを指定する
+nginx | Docker Hubを指定
+今回は公式のnginxイメージをそのまま利用する。(Dockerfileは不要)
+ちなみにnginxは1.10, 1.12 等の偶数のバージョンが安定バージョンになる
+特に理由がなければ偶数バージョンをご利用すること
+
+    ports:
+      - 10080:80
+https://matsuand.github.io/docs.docker.jp.onthefly/compose/compose-file/#ports
+nginxへ外(ホスト側)からコンテナ内へアクセスさせるため公開用のポートを設定する
+ホスト側:コンテナ側 と設定する
+
+    volumes:
+      - ./backend:/work
+      - ./infra/nginx/default.conf:/etc/nginx/conf.d/default.conf
+https://matsuand.github.io/docs.docker.jp.onthefly/compose/compose-file/#volumes
+ホスト側にあるディレクトリ、ファイルをコンテナ内へマウントさせている
+
+docker/nginx/default.conf を作成する
+mkdir infra/nginx
+touch infra/nginx/default.conf
+
+Laravel公式にnginxの設定例が用意されているので、これを流用する
+https://readouble.com/laravel/7.x/ja/deployment.html
+root, fastcgi_pass ドキュメントルート設定を書き換えている
+nginxの設定を詳しく知りたい場合、下記の記事がオススメ
+・nginx beginners_guide
+http://nginx.org/en/docs/beginners_guide.html
+・Nginx設定のまとめ
+https://qiita.com/syou007/items/3e2d410bbe65a364b603
+・nginxについてまとめ(設定編)
+https://qiita.com/morrr/items/7c97f0d2e46f7a8ec967
+
+build & up
+docker-compose down
+docker-compose up -d --build
+
+docker-compose コマンドは docker-compose.yml があるディレクトリで実行する
+★★★実行結果★★★
+$ docker-compose ps
+            Name                          Command              State           Ports        
+--------------------------------------------------------------------------------------------
+laravel_app_1   docker-php-entrypoint php-fpm   Up      9000/tcp             
+laravel_web_1   nginx -g daemon off;            Up      0.0.0.0:10080->80/tcp
+★★★実行結果★★★
+docker-laravel-handson_web_1 コンテナの State が Up になっていたら正常に起動している状態
+また、Ports の項目が、appコンテナは9000/tcp でwebコンテナは 0.0.0.0:10080->80/tcp と表示形式が異なっている
+これはホスト上の10080番ポートをコンテナの80番ポートへ割り当てている
+
+nginxのバージョン確認
+docker-compose exec web nginx -v
+
+webコンテナの確認
+・webコンテナの動作確認
+・HTMLとPHPが表示されるか
+mkdir backend/public
+echo "Hello World" > backend/public/index.html
+echo "<?php phpinfo();" > backend/public/phpinfo.php
+
+「Hello World」が表示されることを確認する。
+http://127.0.0.1:10080/index.html
+phpinfoの情報が表示されることを確認する。
+http://127.0.0.1:10080/phpinfo.php
+
+確認用に作成したHTML, PHPファイルは不要なので削除する
+rm -rf backend/*
+
+#Laravelをインストールする
+・app コンテナに入り、Laravelをインストール
+・welcomeページが表示されるか
+
+docker-compose exec app bash
+composer create-project --prefer-dist "laravel/laravel=8.*" .
+php artisan -V
+★★★実行結果★★★
+Laravel Framework 8.28.1
+★★★実行結果★★★
+
+・composer create-project --prefer-dist
+　・--prefer-dist zipでダウンロードするため高速
+　・composer の–prefer-distってよく使うけど何してる？
+　https://kin29.info/composer-%E3%81%AE-prefer-dist%E3%81%A3%E3%81%A6%E3%82%88%E3%81%8F%E4%BD%BF%E3%81%86%E3%81%91%E3%81%A9%E4%BD%95%E3%81%97%E3%81%A6%E3%82%8B%EF%BC%9F/
+・composer create-project コマンドでメモリ足りない問題の対策
+　・composer update でメモリオーバーする場合の対策
+　https://qiita.com/ucan-lab/items/af39b71c6eb304ddf696
+・artisan について
+　・Laravelが用意しているコマンドラインインターフェイス
+　・https://readouble.com/laravel/7.0/ja/artisan.html
+　・php artisan list 使用可能なコマンド一覧を表示
+
+Laravel ウェルカム画面の表示
+http://127.0.0.1:10080
+
+#データベース(db)コンテナを作る
+MySQLデータベースコンテナを作成する
+MySQLのベースイメージをそのまま利用する
+
+・Docker Hub MySQL
+https://hub.docker.com/_/mysql
+
+参考記事
+docker-compose MySQL8.0 のDBコンテナを作成する
+https://qiita.com/ucan-lab/items/b094dbfc12ac1cbee8cb
+
+ディレクトリ構成
+.
+├── infra
+│   └── mysql
+│       ├── Dockerfile
+│       └── my.cnf # MySQLの設定ファイル
+└── docker-compose.yml
+
+docker-compose.yml へ追記する
+・データベース名やユーザー名等の接続情報とタイムゾーンの設定は環境変数で渡す
+・トップレベルvolumeを使用してデータの永続化
+
+★★★追記内容★★★
+version: "3.8"
+services:
+  app:
+    build: ./infra/php
+    volumes:
+      - ./backend:/work
+
+  web:
+    image: nginx:1.18-alpine
+    ports:
+      - 10080:80
+    volumes:
+      - ./backend:/work
+      - ./infra/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    working_dir: /work
+
+  # 追記
+  db:
+    build: ./infra/mysql
+    volumes:
+      - db-store:/var/lib/mysql
+
+volumes:
+  db-store:
+★★★追記内容★★★
+・docker-compose.yml ファイルはインデント(半角スペース)が意味を持つ
+・web コンテナの設定と同じインデントレベルで db コンテナの設定を貼り付ける
+・volumes はトップレベル(servicesと同じレベル)に貼り付ける
+・DockerのMySQLイメージ起動時に渡す環境変数
+https://qiita.com/nanakenashi/items/180941699dc7ba9d0922
+・Docker for Macのmount遅い問題まとめ
+https://blog.hanhans.net/2017/05/23/docker-for-mac-slow/
+・Performance tuning for volume mounts (shared filesystems)
+https://docs.docker.com/docker-for-mac/
+
+./docker/mysql/Dockerfile を作成する
+mkdir infra/mysql
+touch infra/mysql/Dockerfile
+
+下記のコードを丸ごとコピーして Dockerfile へ貼り付ける
+★★★コード内容★★★
+FROM mysql:8.0
+
+ENV MYSQL_DATABASE=laravel_local \
+  MYSQL_USER=phper \
+  MYSQL_PASSWORD=secret \
+  MYSQL_ROOT_PASSWORD=secret \
+  TZ=Asia/Tokyo
+
+COPY ./my.cnf /etc/mysql/conf.d/my.cnf
+RUN chmod 644 /etc/mysql/conf.d/my.cnf
+★★★コード内容★★★
+Windows環境でボリュームマウントを行うと、ファイルパーミッションが777となるようだ
+my.cnf に書き込み権限が付いてるとMySQLの起動時にエラーが発生する
+その対策としてボリュームマウントではなくDockerfileを作成して my.cnf ファイルコピー、読み取り専用に権限変更している
+・mysqld: [Warning] World-writable config file '/etc/mysql/conf.d/my.cnf' is ignored.
+https://sunday-morning.app/posts/2020-07-31-mysqld-warning-world-writable-config-file-etc-mysql-conf-d-my-cnf-is-ignored
+
+docker/mysql/my.cnf を作成する
+・文字コードの設定
+・タイムゾーンの設定
+・ログ設定
+
+mkdir infra/mysql
+touch infra/mysql/my.cnf
+
+★★★設定内容★★★
+[mysqld]
+# character set / collation
+character_set_server = utf8mb4
+collation_server = utf8mb4_0900_ai_ci
+
+# timezone
+default-time-zone = SYSTEM
+log_timestamps = SYSTEM
+
+# Error Log
+log-error = mysql-error.log
+
+# Slow Query Log
+slow_query_log = 1
+slow_query_log_file = mysql-slow.log
+long_query_time = 1.0
+log_queries_not_using_indexes = 0
+
+# General Log
+general_log = 1
+general_log_file = mysql-general.log
+
+[mysql]
+default-character-set = utf8mb4
+
+[client]
+default-character-set = utf8mb4
+★★★設定内容★★★
+
+build & up
+docker-compose down
+docker-compose up -d --build
+・docker-compose コマンドは docker-compose.yml があるディレクトリで実行する
+★★★実行結果★★★
+$ docker-compose ps
+    Name                   Command               State           Ports        
+------------------------------------------------------------------------------
+laravel_app_1   docker-php-entrypoint php-fpm    Up      9000/tcp             
+laravel_db_1    docker-entrypoint.sh mysqld      Up      3306/tcp, 33060/tcp  
+laravel_web_1   /docker-entrypoint.sh ngin ...   Up      0.0.0.0:10080->80/tcp
+★★★実行結果★★★
+laravel_db_1 コンテナの State が Up になっていたら正常に起動している状態
+$ docker-compose exec db mysql -V
+mysql  Ver 8.0.23 for Linux on x86_64 (MySQL Community Server - GPL)
+
+マイグレーション実行(エラーが発生する)
+docker-compose exec app bash
+php artisan migrate
+
+★★★実行結果★★★
+$ docker-compose exec app bash
+root@0a8d2c664202:/work# php artisan migrate
+
+   Illuminate\Database\QueryException 
+
+  SQLSTATE[HY000] [2002] Connection refused (SQL: select * from information_schema.tables where table_schema = laravel and table_name = migrations and table_type = 'BASE TABLE')
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:678
+    674▕         // If an exception occurs when attempting to run a query, we'll format the error
+    675▕         // message to include the bindings with SQL, which will make this exception a
+    676▕         // lot more helpful to the developer instead of just the database's errors.
+    677▕         catch (Exception $e) {
+  ➜ 678▕             throw new QueryException(
+    679▕                 $query, $this->prepareBindings($bindings), $e
+    680▕             );
+    681▕         }
+    682▕ 
+
+      +36 vendor frames 
+  37  artisan:37
+      Illuminate\Foundation\Console\Kernel::handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+★★★実行結果★★★
+SQLSTATE[HY000] [2002] Connection refused このエラーはよく見るMySQLのエラー
+MySQLに接続拒否されたエラーなので、この場合は大体MySQLへの接続設定に誤りがある
+
+backend/.env のDB接続設定を修正する。
+$ vim backend/.env
+DB_CONNECTION=mysql
+DB_HOST=db
+DB_PORT=3306
+DB_DATABASE=laravel_local
+DB_USERNAME=phper
+DB_PASSWORD=secret
+
+backend/.env.example も同様にDB接続設定を修正しておく
+$ vim backend/.env.example
+DB_CONNECTION=mysql
+DB_HOST=db
+DB_PORT=3306
+DB_DATABASE=laravel_local
+DB_USERNAME=phper
+DB_PASSWORD=secret
+
+マイグレーション実行(再実行)
+docker-compose exec app bash
+php artisan migrate
+★★★実効結果★★★
+$ docker-compose exec app bash
+root@0a8d2c664202:/work# php artisan migrate
+Migration table created successfully.
+Migrating: 2014_10_12_000000_create_users_table
+Migrated:  2014_10_12_000000_create_users_table (41.45ms)
+Migrating: 2014_10_12_100000_create_password_resets_table
+Migrated:  2014_10_12_100000_create_password_resets_table (23.97ms)
+Migrating: 2019_08_19_000000_create_failed_jobs_table
+Migrated:  2019_08_19_000000_create_failed_jobs_table (29.57ms)
+root@0a8d2c664202:/work# 
+★★★実行結果★★★
+
+試しにデータを作ってみる
+docker-compose exec app bash
+php artisan tinker
+$user = new App\Models\User();
+$user->name = 'phper';
+$user->email = 'phper@example.com';
+$user->password = Hash::make('secret');
+$user->save();
+
+docker-compose exec db bash
+mysql -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE
+
+★★★実行結果★★★
+$ docker-compose exec db bash
+root@5cb3f5b909f8:/# mysql -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 10
+Server version: 8.0.23 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> SELECT * FROM users;
++----+-------+-------------------+-------------------+--------------------------------------------------------------+----------------+---------------------+---------------------+
+| id | name  | email             | email_verified_at | password                                                     | remember_token | created_at          | updated_at          |
++----+-------+-------------------+-------------------+--------------------------------------------------------------+----------------+---------------------+---------------------+
+|  1 | phper | phper@example.com | NULL              | $2y$10$W1H1K9EcWFlLIzayu9UICOSo8382J7g.sRG0hdeN8A7T8Ve6lslje | NULL           | 2021-02-21 16:18:18 | 2021-02-21 16:18:18 |
++----+-------+-------------------+-------------------+--------------------------------------------------------------+----------------+---------------------+---------------------+
+1 row in set (0.00 sec)
+
+mysql> 
+★★★実行結果★★★
+
+#Docker環境の再構築
+Docker環境の破棄
+コンテナの停止、ネットワーク・名前付きボリューム・コンテナイメージ、未定義コンテナを削除
+docker-compose down --rmi all --volumes --remove-orphans
+・《滅びの呪文》Docker Composeで作ったコンテナ、イメージ、ボリューム、ネットワークを一括完全消去する便利コマンド
+https://qiita.com/suin/items/19d65e191b96a0079417
+
+作業ディレクトリの削除
+rm -rf laravel
+
+GitHubからリポジトリをクローン
+コピー
+cp -R github/develop-dev/docker/laravel/ docker/laravel/
+cd docker/laravel
+docker-compose up -d --build
+
+Laravelインストール
+app コンテナに入る
+docker-compose exec app bash
+composer install
+Welcome画面が表示されることを確認
+http://127.0.0.1:10080/
+
+composer install 時は .env 環境変数ファイルは作成されないので、 .env.example を元にコピーして作成
+cp -p .env.example .env
+
+.env に APP_KEY= の値がないとエラーが発生する
+このコマンドでアプリケーションキーを生成
+php artisan key:generate
+php artisan migrate
