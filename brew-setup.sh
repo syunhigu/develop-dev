@@ -21,3 +21,4 @@ brew install --cask vagrant
 brew install --cask slack
 brew install --cask transmit
 brew install --cask oracle-jdk
+brew install --cask thunderbird
