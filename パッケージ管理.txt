@@ -57,6 +57,16 @@ brew upgrade --cask
 Warning: Calling brew cask upgrade is deprecated! Use brew upgrade --cask instead.
 brew upgrade --cask --greedy
 mas upgrade
+#brew doctorで下記warningが出た場合
+Warning: You have unlinked kegs in your Cellar.
+Leaving kegs unlinked can lead to build-trouble and cause formulae that depend on
+those kegs to fail to run properly once built. Run `brew link` on these:
+  docker-compose
+※どちらか実行
+To force the link and overwrite all conflicting files:
+  brew link --overwrite docker-compose
+To list all files that would be deleted:
+  brew link --overwrite --dry-run docker-compose
 #インストール済みパッケージ一覧
 brew list
 brew cask list
