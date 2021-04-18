@@ -1,0 +1,86 @@
+docker typescript
+参考
+https://qiita.com/reflet/items/538753d5dcf3560567a9
+
+ファイル構成
+┣ docker
+┃ ┗ nginx
+┃    ┗ default.conf
+┣ src
+┃ ┣ html
+┃ ┃  ┣ js
+┃ ┃  ┃  ┣ dist          ← コンパイルされたファイル
+┃ ┃  ┃  ┃  ┗ greeter.js
+┃ ┃  ┃  ┗ ts            ← コンパイル対象ファイル
+┃ ┃  ┃     ┗ greeter.ts
+┃ ┃  ┗ index.html       ← greeter.jsを読み込んでいるページ
+┃ ┃
+┃ ┣ package.json
+┃ ┣ package-lock.json
+┃ ┗ tsconfig.json
+┃
+┣ .editconfig
+┣ .gitignore
+┣ docker-compose.yml 
+┗ README.md
+
+環境作成
+docker-compose.yml
+docker/nginx/default.conf
+
+フォルダ作成
+mkdir -p src/html/js/ts    # ← コンパイル対象ファイルの配置先
+mkdir -p src/html/js/dist  # ← コンパイル済みファイルの配置先
+
+初期化(npm)
+npm プロジェクトの作成
+docker-compose run --rm node npm init
+作成されれる src/package.json に少し手を加える
+src/package.json
+{
+  ...
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rimraf html/js/dist",                          /* ← 追加 */
+    "tsc": "tsc",                                            /* ← 追加 */
+    "build": "npm-run-all clean tsc",                        /* ← 追加 */
+  },
+  ...
+}
+
+ライブラリ追加
+TypeScriptの開発に必要な各種コマンドをインストール
+docker-compose run --rm node npm install -D typescript @types/node
+docker-compose run --rm node npm install -D ts-node ts-node-dev rimraf npm-run-all
+
+初期化(TypeScript)
+TypeScriptのコンパイラオプションファイルを作成
+docker-compose run --rm node npx tsc --init
+作成されれる src/tsconfig.json に少し手を加える
+src/tsconfig.json
+{
+  "compilerOptions": {
+    "target": "ES2019",              /* ← ここ変更 */
+    "module": "commonjs",
+    "sourceMap": true,               /* ← ここ変更 */
+    "outDir": "./html/js/dist",      /* ← ここ変更 */
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": [                       /* ← ここ追加 */
+    "html/js/ts/**/*"
+  ]
+}
+
+サンプルコード
+サンプルコードを配置
+src/html/js/ts/greeter.ts
+src/html/index.html
+
+コンパイル
+コンパイルして、 src/html/js/dist/greeter.js を作成する
+docker-compose run --rm node npm run build
+
+サーバ起動
+docker-compose up -d
