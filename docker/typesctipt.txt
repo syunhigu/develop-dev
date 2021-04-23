@@ -43,7 +43,7 @@ src/package.json
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rimraf html/js/dist",                          /* ← 追加 */
     "tsc": "tsc",                                            /* ← 追加 */
-    "build": "npm-run-all clean tsc",                        /* ← 追加 */
+    "build": "npm-run-all clean tsc"                         /* ← 追加 */
   },
   ...
 }
