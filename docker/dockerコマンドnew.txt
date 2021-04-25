@@ -37,6 +37,8 @@ docker-compose rm
 docker-compose down
 #イメージも合わせて削除
 docker-compose down --rmi all
+#コンテナログイン
+docker-compose exec php bash
 
 DockerによるPHP開発環境構築（PHP + MySQL + Nginx）
 https://qiita.com/nemui_/items/f911be7ffa4f29293fd5
