@@ -5,6 +5,7 @@ brew install git
 brew install zsh-completions
 brew install docker-machine
 brew install docker-compose
+#brew install postgresql
 #cask
 brew install --cask google-chrome
 brew install --cask sourcetree
@@ -23,3 +24,7 @@ brew install --cask transmit
 brew install --cask oracle-jdk
 brew install --cask thunderbird
 brew install --cask iterm2
+#brew install --cask pgadmin4
+brew install --cask tableplus
+brew install --cask dbeaver-community
+#brew install --cask postico
