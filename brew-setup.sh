@@ -13,7 +13,8 @@ brew install --cask visual-studio-code
 brew install --cask firefox
 brew install --cask skype
 brew install --cask dropbox
-brew install --cask google-backup-and-sync
+#brew install --cask google-backup-and-sync
+brew install --cask google-drive-file-stream
 brew install --cask github
 brew install --cask microsoft-office
 brew install --cask docker
