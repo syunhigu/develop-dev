@@ -24,8 +24,8 @@ services:
 
   db:
     image: mariadb:10.4.21
-    container_name: mariadb
-    hostname: mariadb
+#    container_name: mariadb
+#    hostname: mariadb
     environment:
       MYSQL_ROOT_PASSWORD: secret
       MYSQL_DATABASE: test
