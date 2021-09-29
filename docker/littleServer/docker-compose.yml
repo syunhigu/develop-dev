@@ -1,7 +1,8 @@
 version: '3'
 services:
   nginx:
-    image: nginx:latest
+#    image: nginx:latest
+    build: ./nginx
 #    container_name: nginx
 #    hostname: nginx
     ports:
