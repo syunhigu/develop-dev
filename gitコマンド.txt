@@ -39,6 +39,8 @@ git add xxx
 git add app/scripts/controllers/kakugenctrl.js
 #消す対象のファイルをコミット対象とする時
 git rm app/scripts/controllers/detail.jsbk
+#git管理下にある複数のファイルをrmしたときに、それらを一括してgit rmしたい場合
+git rm `git ls-files --deleted`
 #ディレクトリ単位でコミットしたい時は以下のようにディレクトリ指定も可能
 git add ./
 #コミット対象を確認する
