@@ -67,6 +67,11 @@ To force the link and overwrite all conflicting files:
   brew link --overwrite docker-compose
 To list all files that would be deleted:
   brew link --overwrite --dry-run docker-compose
+Warning: Some installed formulae are deprecated or disabled.
+You should find replacements for the following formulae:
+  docker-machine
+警告で表示されているバージョンをアンインストール
+brew uninstall docker-machine
 #インストール済みパッケージ一覧
 brew list
 brew cask list
