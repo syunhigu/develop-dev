@@ -3,7 +3,7 @@
 #インストール一覧
 brew install git
 brew install zsh-completions
-brew install docker-machine
+#brew install docker-machine
 brew install docker-compose
 #brew install postgresql
 #cask
