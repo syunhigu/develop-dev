@@ -22,6 +22,19 @@ git branch -a
 #ブランチをリモートに登録
 git push -u origin 作成したブランチ
 
+#リモートリポジトリに登録する方法
+※あらかじめリモートリポジトリを作成してある場合
+#対象フォルダ配下でローカルリポジトリ作成
+git init
+#push対象ファイルをインデックスに追加
+git add xxx
+#コミット
+git commit "xxx"
+#リモートリポジトリに追加
+git remote add origin https://github.com/ユーザーID/リモートリポジトリ名.git
+#リモートリポジトリにpush
+git push -u origin master
+
 ------------------------------------
 #コミット
 #変更したファイルの一覧を確認
