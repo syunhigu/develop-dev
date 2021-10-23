@@ -11,3 +11,9 @@ composer -V
 #PHPのバージョン確認(コンテナの外からコマンド実行)
 docker compose exec [サービス名] [実行したいコマンド]
 docker compose exec app php -v
+#Laravelをインストールする
+docker compose exec app bash
+composer create-project --prefer-dist "laravel/laravel=8.*" .
+php artisan -V
+#コンテナを破棄する
+docker compose down
