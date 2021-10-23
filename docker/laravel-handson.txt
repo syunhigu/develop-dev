@@ -68,3 +68,29 @@ php artisan storage:link
 chmod -R 777 storage bootstrap/cache
 #マイグレーション実行
 php artisan migrate
+
+#オマケ
+#MySQLに接続したい
+#マイグレーションが実行されるとLaravel側で最初から用意されている users, password_resets のテーブルが生成されている
+docker-compose exec db bash -c 'mysql -u${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE}'
+show tables;
+desc users;
+
+#Laravelのログをコンテナログに表示する
+#backend/.env を修正
+LOG_CHANNEL=stderr
+#backend/routes/web.php
+Route::get('/', function () {
+    logger('welcome route.');
+    return view('welcome');
+});
+#ログ表示
+docker compose logs
+# -f でログウォッチ
+docker compose logs -f
+# サービス名を指定してログを表示
+docker compose logs -f app
+#MySQLクライアントツールで接続したい
+#docker-compose.yml の db サービスに下記設定を追記して、コンテナを再起動して設定を反映
+    ports:
+      - 33060:3306
