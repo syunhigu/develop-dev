@@ -2,5 +2,19 @@ docker laravel環境構築
 ※参考
 【超入門】20分でLaravel開発環境を爆速構築するDockerハンズオン
 https://qiita.com/ucan-lab/items/56c9dc3cf2e6762672f4
+.
+├── README.md (この名前にするとGitHubで見た時にHTMLに変換して表示してくれる)
+├── infra (*1)
+│   ├── mysql (*1)
+│   │   ├── Dockerfile
+│   │   └── my.cnf (*1)
+│   ├── nginx (*1)
+│   │   └── default.conf (*1)
+│   └── php (*1)
+│       ├── Dockerfile (この名前にするとファイル名の指定を省略できる)
+│       └── php.ini (*1)
+├── docker-compose.yml (この名前にするとファイル名の指定を省略できる)
+└── backend (*1)
+    └── Laravelをインストールするディレクトリ
 最強のLaravel開発環境をDockerを使って構築する
 https://qiita.com/ucan-lab/items/5fc1281cd8076c8ac9f4

@@ -1,0 +1,25 @@
+#通常はメジャー番号とマイナー番号を両方指定
+#ちなみにマイナーバージョンを指定しない場合はデフォルト0が使用される
+#https://matsuand.github.io/docs.docker.jp.onthefly/compose/compose-file/compose-versioning/
+version: "3.9"
+services:
+  app: # => サービス名は任意
+    build: ./infra/php
+    volumes:
+      - ./backend:/work
+
+  web:
+    #https://matsuand.github.io/docs.docker.jp.onthefly/compose/compose-file/#image
+    #nginxは1.10, 1.12 等の偶数のバージョンが安定バージョン
+    image: nginx:1.20-alpine
+    ports:
+    #https://matsuand.github.io/docs.docker.jp.onthefly/compose/compose-file/#ports
+    #nginxへ外(ホスト側)からコンテナ内へアクセスさせるため公開用のポートを設定します。
+    #ホスト側:コンテナ側 と設定
+      - 8080:80
+    volumes:
+      #https://matsuand.github.io/docs.docker.jp.onthefly/compose/compose-file/#volumes
+      #ホスト側にあるディレクトリ、ファイルをコンテナ内へマウント
+      - ./backend:/work
+      - ./infra/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    working_dir: /work

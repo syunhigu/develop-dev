@@ -1,0 +1,13 @@
+#build & up
+docker compose up -d --build
+#コンテナ一覧を表示
+docker compose ps
+#作成したappコンテナログイン
+docker compose exec app bash
+#PHPのバージョン確認
+php -v
+#Composerのバージョン確認
+composer -V
+#PHPのバージョン確認(コンテナの外からコマンド実行)
+docker compose exec [サービス名] [実行したいコマンド]
+docker compose exec app php -v
