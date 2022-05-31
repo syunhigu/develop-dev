@@ -30,3 +30,4 @@ brew install --cask tableplus
 brew install --cask dbeaver-community
 #brew install --cask postico
 #brew install --cask comparemerge
+brew install --cask discord
