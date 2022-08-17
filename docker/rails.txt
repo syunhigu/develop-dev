@@ -115,3 +115,11 @@ docker-compose up は docker-compose.yml に基づいて起動するコマンド
 これで無事に Rails の開発用サーバーが起動した事になる
 ブラウザのアドレスバーに http://localhost:3000/ と入力し、起動を確認
 以下の画像のような画面が出れば成功
+
+・コンテナログイン
+web
+docker-compose exec web bash
+db
+docker-compose exec db bash
+dbログイン
+psql -U postgres
