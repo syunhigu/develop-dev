@@ -1,0 +1,23 @@
+環境構築
+参考サイト
+docker
+https://qiita.com/jhorikawa_err/items/fb9c03c0982c29c5b6d5
+
+https://www.sejuku.net/blog/51241
+初回起動
+docker-compose up -d --build
+※２回目以降
+docker-compose up -d
+コンテナ停止
+docker-compose stop
+コンテナログイン
+docker-compose exec python3 bash
+フォルダ移動
+cd opt/
+サンプル実行
+①python samplePython.py 180.0
+※下記のように円周率の答えが出ればおk
+3.141592653589793
+②python sampleBeautifulsoup4.py
+※下記のように表示が出ればおk
+[<h1>sayhello</h1>, <h1>saysay</h1>]
