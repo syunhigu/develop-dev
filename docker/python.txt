@@ -2,8 +2,10 @@
 参考サイト
 docker
 https://qiita.com/jhorikawa_err/items/fb9c03c0982c29c5b6d5
-
+【初心者向け】PythonでWebスクレイピングをしてみよう!手順まとめ
 https://www.sejuku.net/blog/51241
+図解！PythonでWEB スクレイピングを極めよう！(サンプルコード付きチュートリアル)
+https://ai-inter1.com/python-webscraping/
 初回起動
 docker-compose up -d --build
 ※２回目以降
