@@ -31,7 +31,7 @@ brew install mas
 
 #パッケージのインストール
 brew install (package name)
-brew cask install (package name)
+brew install --cask (package name)
 mas install (package ID)
 ※IDは、URL末尾の「id406056744?mt=12」のような文字列のidと?の間の数字
 mas-cliでのインストールは、Apple IDと紐付けるため一度App Storeから入手しておく必要がある
