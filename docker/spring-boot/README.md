@@ -3,7 +3,8 @@
 Docker環境にて、Spring Bootを利用できるようにする  
 Spring Initializrで作成したプロジェクトを、Docker上でビルド、起動する  
 IDEはVS Codeを利用して、デバッグもできるようにする  
-ビルドには、Gradle を使用
+ビルドには、Gradle を使用  
+[JPA で MySQL データアクセス](https://spring.pleiades.io/guides/gs/accessing-data-mysql/)
 
 ## 目次
 1. 環境
@@ -72,6 +73,63 @@ mvnコマンド確認
 ```
 コンパイル
 ```
-./mvnw compile
+./mvnw clean compile
+```
+JPAを使用する場合、DBの接続設定が必要  
+src/main/resources/application.properties にDBの接続情報を追加
+```
+spring.datasource.driverClassName=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:mysql://db:3306/${db.url:spring}
+spring.datasource.username=${db.username:spring}
+spring.datasource.password=${db.password:secret}
+spring.jpa.hibernate.ddl-auto=update
 ```
 
+### 6. DB検索機能を作成する
+DB検索機能を作成する  
+JPAを利用して、DB検索機能を実装する
+#### 6.1. モデルの実装
+```
+src/main/java/com/example/demo/model/entity/UserEntity.java
+```
+
+#### 6.2. コントローラーの実装
+データを取得する処理にはサービスクラスに実装しているため、<br>コントローラーはリクエストの処理のみ  
+```
+src/main/java/com/example/demo/controller/UserController.java
+```
+
+#### 6.3. サービスクラスの実装
+サービスクラスでは、リポジトリクラスを通じて、DBからデータを取得する
+```
+src/main/java/com/example/demo/service/UserService.java
+```
+#### 6.4. リポジトリクラスの実装
+リポジトリクラスでは、JpaRepositoryを継承するだけで、取得するロジックを実装する必要はない
+```
+src/main/java/com/example/demo/repository/UserRepository.java
+```
+
+#### 6.5. ビューの実装
+HTMLは必要最低限で取得したデータを一覧表示する
+```
+src/main/resources/templates/index.html
+```
+
+#### 6.6. ビルドと起動
+ビルド
+```
+./mvnw clean compile
+```
+起動
+```
+対象ソースを右クリックで「Run」実行
+```
+エラー解消
+```
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2023-04-18T17:08:30.061Z ERROR 8687 --- [           main] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'userController': Unsatisfied dependency expressed through field 'userService': Error creating bean with name 'userService': Unsatisfied dependency expressed through field 'userRepository': Error creating bean with name 'userRepository' defined in com.example.demo.repository.UserRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Not a managed type: class com.example.demo.model.entity.UserEntity
+        at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:713) ~[spring-beans-6.0.7.jar:6.0.7]
+```
