@@ -43,7 +43,7 @@ sudo mkdir /usr/local/(directory name)
 sudo chown -R $(whoami) /usr/local/(directory name)
 #パッケージのアンインストール
 brew uninstall (package name)
-brew cask uninstall (package name)
+brew uninstall --cask (package name)
 mas uninstall (package ID)
 #アップデートがあるパッケージ一覧
 brew outdated
