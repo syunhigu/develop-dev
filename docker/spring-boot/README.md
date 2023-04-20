@@ -125,11 +125,18 @@ src/main/resources/templates/index.html
 ```
 対象ソースを右クリックで「Run」実行
 ```
-エラー解消
+SQL
 ```
-Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
-2023-04-18T17:08:30.061Z ERROR 8687 --- [           main] o.s.boot.SpringApplication               : Application run failed
-
-org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'userController': Unsatisfied dependency expressed through field 'userService': Error creating bean with name 'userService': Unsatisfied dependency expressed through field 'userRepository': Error creating bean with name 'userRepository' defined in com.example.demo.repository.UserRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Not a managed type: class com.example.demo.model.entity.UserEntity
-        at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:713) ~[spring-beans-6.0.7.jar:6.0.7]
+INSERT INTO `spring`.`users`
+(`id`,
+`email`,
+`name`,
+`password`)
+VALUES
+(1,
+'test@test.jp',
+'テスト太郎',
+'password');
 ```
+URL  
+http://localhost:8080/users

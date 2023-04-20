@@ -37,6 +37,8 @@ docker-compose rm
 docker-compose down
 #イメージも合わせて削除
 docker-compose down --rmi all
+#コンテナ、イメージ、ボリューム、ネットワークを一括完全消去
+docker-compose down --rmi all --volumes --remove-orphans
 #コンテナログイン
 docker-compose exec php bash
 
