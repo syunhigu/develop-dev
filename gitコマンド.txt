@@ -26,12 +26,14 @@ git push -u origin 作成したブランチ
 ※あらかじめリモートリポジトリを作成してある場合
 #対象フォルダ配下でローカルリポジトリ作成
 git init
+git branch -m master
 #push対象ファイルをインデックスに追加
 git add xxx
 #コミット
-git commit "xxx"
+git commit -m "xxx"
 #リモートリポジトリに追加
 git remote add origin https://github.com/ユーザーID/リモートリポジトリ名.git
+git remote add origin git@github.com:ユーザーID/リモートリポジトリ名.git
 #リモートリポジトリにpush
 git push -u origin master
 
