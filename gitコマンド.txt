@@ -86,3 +86,10 @@ git branch --delete develop
 git branch -D develop
 #リモートブランチ削除
 git push --delete origin develop
+
+------------------------------------
+#push前に直前のコミットをなかったことにする方法
+#ローカルリポジトリ内で下記コマンドを実行して直前のコミットをなかったことにしてソースの状態も直前のコミットのをする前の状態に戻す。
+git reset --hard HEAD^
+#ローカルリポジトリ内で下記コマンドを実行して直前のコミットをなかったことにしてソースはそのままにする。
+git reset --soft HEAD^
