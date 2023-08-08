@@ -67,7 +67,7 @@ docker logs -f nginx-latest
 
 ＃Nginxのイメージをダウンロード
 docker pull nginx
-#nginxの起動
+#nginxの起動
 docker run --name [コンテナ名] -d -p [ホスト側のポート番号]:[コンテナ側のポート番号] [イメージ名]
 –name で　任意のコンテナ名を指定。-d はコンテナをバックグラウンドで実行。-p はコンテナのポートに、ホストのポートからアクセスできるようにする。
 docker run --name nginx00 -d -p 8080:80 nginx:latest
