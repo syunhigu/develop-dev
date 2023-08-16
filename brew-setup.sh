@@ -6,6 +6,7 @@ brew install zsh-completions
 #brew install docker-machine
 brew install docker-compose
 #brew install postgresql
+brew install awscli
 #cask
 brew install --cask google-chrome
 brew install --cask sourcetree
