@@ -75,9 +75,20 @@ git reset --hard HEAD^
 git reset --soft HEAD^
 
 ------------------------------------
+#リバートしたいとき
+#特定コミットの処理を、うち消すコミットを作成する
+https://www.sejuku.net/blog/71634#index_id2
+git revert <打ち消したいコミットID>
+
+------------------------------------
+#リバート取り消したいとき
+https://mebee.info/2021/06/28/post-30245/
+git revert --abort
+
+------------------------------------
 #マージしたい時
 #masterブランチにマージするとき
-# masterブランチに移動
+#masterブランチに移動
 git checkout master
 # masterブランチにfeatureブランチをマージします
 git merge feature/58
