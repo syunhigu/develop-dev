@@ -77,9 +77,11 @@ git branch
   master
 ```
 
-`feature/<feature name>` のブランチが作成され、自動にcheckoutされる。`<feature name>`は開発する機能がわかるように設定する。  
+`feature/<feature name>` のブランチが作成され、自動にcheckoutされる。  
+`<feature name>`は開発する機能がわかるように設定する。  
 
-GitHubなどのプラットフォームを使って他の開発者とコラボレーションをしている場合は**publish**コマンドを使ってリポジトリにfeatureブランチをpushすることもできる。  
+GitHubなどのプラットフォームを使って他の開発者とコラボレーションをしている場合は  
+**publish**コマンドを使ってリポジトリにfeatureブランチをpushすることもできる。  
 ```
 git flow feature publish <feature name>
 
@@ -92,7 +94,8 @@ git flow feature publish test
 git flow feature pull origin <feature name>
 ```
 
-このブランチで新しい機能の開発をする。今回はテキストファイルを一つ作ることで代替する。  
+このブランチで新しい機能の開発をする。  
+今回はテキストファイルを一つ作ることで代替する。  
 ```
 touch hogehoge.txt
 ```
@@ -293,7 +296,7 @@ Merge branch 'hotfix/test2'
 **※環境によってはされない場合がある**  
 * hotfixブランチをmasterブランチにマージ
 * hotfixブランチをdevelopブランチにマージ　※
-* hotfixブランチを削除　※
+* hotfixブランチを削除　※  
 developブランチにマージされていない場合は、developブランチにmasterブランチをマージ及びプッシュすること  
 
 releaseブランチを手動で削除する場合  
