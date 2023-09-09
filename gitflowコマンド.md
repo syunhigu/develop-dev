@@ -5,6 +5,11 @@ https://dev.classmethod.jp/articles/introduce-git-flow/
 https://qiita.com/CarlBrown23/items/84a6c1ce82f602eaa5a6  
 https://qiita.com/KosukeSone/items/514dd24828b485c69a05  
 
+## ヘルプ
+```
+git flow help
+```
+
 ## 1. 初期化
 ```
 git flow init -d
