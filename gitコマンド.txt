@@ -62,8 +62,8 @@ git add ./
 git status
 #コミットする
 git commit
-#m オプションを使用するとコメントを同時にセットできる
-git commit -m"feature/58" -m"格言画面へ飛ぶように修正"`
+#-m オプションを使用するとコメントを同時にセットできる
+git commit -m "格言画面へ飛ぶように修正"
 #githubへpush
 git push origin xxx
 
