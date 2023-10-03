@@ -10,7 +10,7 @@ docker-machine ls
 #Dockerイメージの確認
 docker images
 #Dockerイメージの検索
-docker search [オプション] [ キーワード ]
+docker search [オプション] [キーワード]
 ※使い方の実例
 mysqlのイメージを検索
 docker search mysql

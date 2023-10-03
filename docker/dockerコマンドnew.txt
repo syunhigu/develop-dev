@@ -16,7 +16,7 @@ docker run --name wordpress -e WORDPRESS_DB_PASSWORD=yutsuki55 --link mysql:mysq
 #docker-compose.yml作成
 touch docker-compose.yml
 
-#コマンドのオプションとdocker-compose.ymlを比較
+#dockerコマンドのオプションとdocker-compose.ymlを比較
 設定内容        　　　　docker run コマンド  docker-compose.yml
 コンテナ名      　　　　--name  　　　　　　　container_name
 環境変数　　　　　 　　　-e　　　　　　　　　　 environment
