@@ -24,9 +24,15 @@ touch docker-compose.yml
 使用するDockerイメージ  コマンドの最後　　　　 image
 
 cd <docker-compose.ymlが置かれているディレクトリ>
+#コマンド確認
+docker-compose
+#イメージをbuild
+docker-compose build
 #コンテナ起動
 docker-compose up -d
 ※-dオプションはバックグラウンドで実行
+#イメージを再build（起動と同時にビルド）
+docker-compose up -d --build
 #起動確認
 docker-compose ps
 #コンテナ停止
