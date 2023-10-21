@@ -37,3 +37,5 @@ brew install --cask discord
 brew install --cask zoom
 brew install --cask microsoft-teams
 brew install --cask gather
+brew install --cask adobe-creative-cloud
+brew install --cask adobe-creative-cloud-cleaner-tool
