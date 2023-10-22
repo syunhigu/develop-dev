@@ -24,13 +24,13 @@ brew install --cask docker
 brew install --cask virtualbox
 brew install --cask vagrant
 brew install --cask slack
-brew install --cask transmit
+#brew install --cask transmit
 brew install --cask oracle-jdk
 brew install --cask thunderbird
 brew install --cask iterm2
 #brew install --cask pgadmin4
 brew install --cask tableplus
-brew install --cask dbeaver-community
+#brew install --cask dbeaver-community
 #brew install --cask postico
 #brew install --cask comparemerge
 brew install --cask discord
