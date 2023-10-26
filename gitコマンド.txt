@@ -5,10 +5,10 @@ git clone https://github.com/syunhigu/develop-dev.git
 #ローカルのブランチからブランチを作成する方法
 #ブランチ一覧表示
 git branch -a
-#リモートブランチの一覧を表示
-git branch --remote
 #ローカルブランチの一覧を表示
 git branch
+#リモートブランチの一覧を表示
+git branch --remote
 #ブランチを作る元のブランチに切り替える
 git checkout master
 #ブランチを作成
