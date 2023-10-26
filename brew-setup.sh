@@ -9,6 +9,7 @@ brew install docker-compose
 #brew install postgresql
 brew install awscli
 brew install git-flow
+brew install tree
 #cask
 brew install --cask google-chrome
 brew install --cask sourcetree
