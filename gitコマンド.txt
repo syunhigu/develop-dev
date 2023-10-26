@@ -7,6 +7,8 @@ git clone https://github.com/syunhigu/develop-dev.git
 git branch -a
 #リモートブランチの一覧を表示
 git branch --remote
+#ローカルブランチの一覧を表示
+git branch
 #ブランチを作る元のブランチに切り替える
 git checkout master
 #ブランチを作成
