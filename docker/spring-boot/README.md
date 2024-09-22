@@ -33,7 +33,7 @@ IDEはVS Codeを利用して、デバッグもできるようにする
 以下のディレクトリ構成としている
 ```
 .
-├── docker-compose.yml
+├── docker-compose.yaml
 ├── mysql
 │   ├── Dockerfile
 │   └── my.cnf
@@ -43,7 +43,7 @@ IDEはVS Codeを利用して、デバッグもできるようにする
 ## 3. Docker環境
 Docker環境を作成する  
 構築するサーバーはアプリケーションサーバー（app）、データベースサーバー（db）の2つ
-docker-compose.yml を作成
+docker-compose.yaml を作成
 
 ### 3.1. アプリケーションサーバー（app）コンテナ
 アプリケーションサーバーについては、Docker HubがOpenJDKイメージの廃止を決定したそうなので、Eclipse Temurinの公式イメージを使用  
