@@ -1,0 +1,5 @@
+\\wsl$\Ubuntu-24.04\home\ubuntu
+
+gitbashの場合
+s.higuchi@FBC-PC63 MINGW64 //wsl$/Ubuntu-24.04/home/ubuntu/work
+$ cd \\\\wsl$\\Ubuntu-24.04\\home\\ubuntu
