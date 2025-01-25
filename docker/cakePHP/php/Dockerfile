@@ -1,4 +1,4 @@
-FROM php:7.4.13-fpm-buster
+FROM php:8.2-fpm-buster
 COPY php.ini /usr/local/etc/php/
 # composerをインストール
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
