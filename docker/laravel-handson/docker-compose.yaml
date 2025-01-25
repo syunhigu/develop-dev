@@ -1,7 +1,6 @@
 #通常はメジャー番号とマイナー番号を両方指定
 #ちなみにマイナーバージョンを指定しない場合はデフォルト0が使用される
 #https://matsuand.github.io/docs.docker.jp.onthefly/compose/compose-file/compose-versioning/
-version: "3.9"
 services:
   app: # => サービス名は任意
     build: ./infra/php
