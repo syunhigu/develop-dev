@@ -30,6 +30,10 @@ git config --global -l
 eval "$(ssh-agent -s)"
 #秘密鍵の登録状況を確認
 ssh-add -l
+※登録なし表示
+The agent has no identities.
+※起動前表示
+Could not open a connection to your authentication agent.
 
 #SSHキーの確認
 ls -al ~/.ssh
