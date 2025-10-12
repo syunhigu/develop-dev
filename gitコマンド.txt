@@ -1,3 +1,70 @@
+#ディレクトリ、ファイル設定
+mkdir ~/.ssh
+touch ~/.ssh/config
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/*
+xattr -cr ~/.ssh
+
+＃初期設定
+git config --global user.name "test"
+git config --global user.email test@example.com
+git config --global color.ui auto
+git config --global color.diff auto
+git config --global color.status auto
+git config --global color.branch auto
+#ファイル名の大文字・小文字の変更を検知する。
+git config --global core.ignorecase false
+#日本語ファイル名をエスケープせずに表示
+git config --global core.quotepath false
+#濁点つきのディレクトリ・ファイルが分けて表示されてしまう UTF8-MAC 問題の解決方法
+git config --global core.precomposeunicode true
+#マージコンフリクトを見やすくする
+git config --global merge.conflictStyle diff3
+
+#ローカルの設定
+git config -l
+#グローバルの設定
+git config --global -l
+
+#ssh-agentを起動
+eval "$(ssh-agent -s)"
+#秘密鍵の登録状況を確認
+ssh-add -l
+
+#SSHキーの確認
+ls -al ~/.ssh
+#新しいSSHキーを生成する
+ssh-keygen -t rsa -b 4096 -C "test@example.com"
+ssh-keygen -t ed25519 -N "" -f ~/.ssh/github -C test@example.com
+-t : 鍵の種類を選択。安全面と性能面で最強なEd25519アルゴリズム一択です。
+-C : GitHubに設定したメールアドレスを指定するのが一般的なようです。
+-f : ファイル名を指定。デフォルトは ~/.ssh/id_ed25519
+-N : パスフレーズの指定。 "" でパスフレーズなし
+セキュリティを上げるなら設定する
+
+#SSH秘密鍵をssh-agentに追加し、パスフレーズをキーチェーンに保存
+ssh-add -K ~/.ssh/id_rsa
+ssh-add -K ~/.ssh/github
+
+#SSHキーをクリップボードにコピー
+pbcopy < ~/.ssh/id_rsa.pub
+pbcopy < ~/.ssh/github.pub
+#接続テスト
+ssh -T github
+正常メッセージ
+Hi syunhigu! You've successfully authenticated, but GitHub does not provide shell access.
+※下記警告メッセージが出た場合は後述のコマンド実施
+Warning: Permanently added 'github.com,13.114.40.48' (RSA) to the list of known hosts.
+ssh-Keygen -R github.com,52.69.186.44
+
+※下記警告メッセージが出た場合は後述のコマンド実施
+WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!
+※/Users/syunhigu/.ssh/known_hostsに同じ名前で存在しているため
+→ipアドレスは上記ファイルから確認する
+☆コマンド実施時は上記ファイルは閉じておくこと
+ssh-keygen -R 52.192.72.89
+
+------------------------------------
 #gitクローン
 #クローンしたいフォルダに移動
 cd フォルダ
