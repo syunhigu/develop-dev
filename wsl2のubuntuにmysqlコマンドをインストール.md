@@ -75,9 +75,6 @@ mysql> SHOW DATABASES;
 | Database           |
 +--------------------+
 | information_schema |
-| maas_admin         |
-| maas_cmn           |
-| maas_mst           |
 | mysql              |
 | performance_schema |
 | sys                |
