@@ -80,6 +80,8 @@ git branch -a
 git branch
 #リモートブランチの一覧を表示
 git branch --remote
+#ローカルの追跡ブランチの情報を更新（リモートブランチの情報と同期）
+git remote update -p
 #ブランチを作る元のブランチに切り替える
 git checkout master
 #ブランチを作成
