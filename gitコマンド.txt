@@ -195,8 +195,13 @@ revertコマンドとは違い、「コミットを取り消した」という�
 #ブランチ名変更
 ##ローカルブランチ名の変更
 git branch -m 古いブランチ名 新しいブランチ名
+git branch -m hotfix/develop-environment
+##他のブランチ（現在のブランチ以外）の名前を変更する場合
+git branch -m 古いブランチ名 新しいブランチ名
+例：
+git branch -m old-branch-name new-branch-name
 
-// 今いるブランチの名前を変更する場合
+# 今いるブランチの名前を変更する場合
 git branch -m 新しいブランチ名
 ##リモートブランチ名の変更
 手順としては、
@@ -206,6 +211,36 @@ git branch -m 新しいブランチ名
 git branch -m 古いブランチ名 新しいブランチ名
 git push -u origin 現在のブランチ名      // $ git push -u origin HEAD とするとブランチ名を入力しなてもpushできるので便利。
 git push origin :リモートのブランチ名
+
+------------------------------------
+# その他
+gitでmasterブランチをチェックアウトしてからファイル修正後ブランチ名変更してプッシュする場合は、
+以下の手順でやれば問題なし
+## master ブランチをチェックアウト
+git checkout master
+## 最新に更新（必須ではないが推奨）
+git pull origin master
+## ファイルを修正
+## 名前を付けて新しいブランチに変更（ここで初めてブランチを作る）
+git checkout -b new-branch-name
+## 変更をステージ＆コミット
+git add .
+git commit -m "変更内容の説明"
+## リモートにプッシュ
+git push origin new-branch-name
+
+#上記をhotfixブランチでやる場合
+## 最新のmasterをチェックアウトして更新
+git checkout master
+git pull origin master
+## hotfixブランチを作成（ここで分岐）
+git checkout -b hotfix/some-fix-name
+# 修正作業
+## 変更をステージ＆コミット
+git add .
+git commit -m "Hotfix: 説明"
+## リモートにブランチを作成してプッシュ
+git push origin hotfix/some-fix-name
 
 ------------------------------------
 #ローカルブランチ削除
