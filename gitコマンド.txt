@@ -1,3 +1,8 @@
+Git 初期設定
+https://qiita.com/ucan-lab/items/aadbedcacbc2ac86a2b3
+GitHubでssh接続する手順~公開鍵・秘密鍵の生成から~
+https://qiita.com/shizuma/items/2b2f873a0034839e47ce
+
 #ディレクトリ、ファイル設定
 mkdir ~/.ssh
 touch ~/.ssh/config
@@ -5,7 +10,41 @@ chmod 700 ~/.ssh
 chmod 600 ~/.ssh/*
 xattr -cr ~/.ssh
 
-＃初期設定
+#config初期設定
+```
+$ vi ~/.ssh/config
+
+# 全ホストの共通設定
+Host *
+  StrictHostKeyChecking no
+  UserKnownHostsFile=/dev/null
+  ServerAliveInterval 15
+  ServerAliveCountMax 30
+  AddKeysToAgent yes
+  UseKeychain yes
+  IdentitiesOnly yes
+```
+* Host * 全ホストの共通設定
+* OpenSSHの警告メッセージを非表示
+  * StrictHostKeyChecking no
+  * UserKnownHostsFile=/dev/null
+* SSH接続のタイムアウト設定
+  * ServerAliveInterval 15
+  * ServerAliveCountMax 30
+* 入力したパスワード/鍵の省略設定
+  * AddKeysToAgent yes
+  * UseKeychain yes
+* 認証の際に、ssh_config ファイルで指定された秘密鍵のみを使用するよう指定
+  * IdentitiesOnly yes
+
+#global .gitignore 設定(推奨)
+mkdir -p ~/.config/git
+ディレクトリがない場合作成する。
+.DS_Store
+[Git] .gitignoreの仕様詳解
+https://qiita.com/anqooqie/items/110957797b3d5280c44f
+
+＃初期設定(お好み)
 git config --global user.name "test"
 git config --global user.email test@example.com
 git config --global color.ui auto
@@ -20,6 +59,45 @@ git config --global core.quotepath false
 git config --global core.precomposeunicode true
 #マージコンフリクトを見やすくする
 git config --global merge.conflictStyle diff3
+#git rebase 対話モード時にも標準モードのようにブランチを更新する
+※ Git v2.38.0 以降のオプション
+git config --global rebase.updateRefs true
+#git push 時に同じ名前のリモートブランチを作成する
+git config --global push.default current
+#デフォルトブランチを main に変更する
+※ 2020/10/1 からデフォルトブランチがmasterからmainに変更された。
+The default branch for newly-created repositories is now main
+https://github.blog/changelog/2020-10-01-the-default-branch-for-newly-created-repositories-is-now-main/
+git config --global init.defaultBranch main
+設定不要かもしれないが、git init時のデフォルトブランチを指定できる。
+#git fetch --prune オプションを常に有効化
+git config --global fetch.prune true
+--prune オプションは削除されたリモートの追跡ブランチをローカルリポジトリに反映する。
+#git status 追跡されていないファイルはすべて表示
+git config --global status.showUntrackedFiles all
+追跡されていないファイルはすべて表示させたい。
+※ 設定しておかないと新規ディレクトリ配下のファイルが表示されなかったりする。
+#改行コードの自動変換機能
+git config --global core.autocrlf input
+input の場合は改行コードをコミット時に LF に変換してくれる。
+(Mac, Linuxは LF, Windowsは CRLF がデフォルトの改行コード。)
+この自動変換を無効にしたい場合は false を設定。
+#git パーミッションの変更を無視する
+git config --global core.filemode false
+
+#設定まとめ
+```
+git config --global rebase.updateRefs true
+git config --global push.default current
+git config --global init.defaultBranch main
+git config --global fetch.prune true
+git config --global status.showUntrackedFiles all
+git config --global core.autocrlf input
+git config --global core.filemode false
+git config --global core.ignorecase false
+git config --global core.quotepath false
+git config --global merge.conflictStyle zdiff3
+```
 
 #ローカルの設定
 git config -l
@@ -50,9 +128,19 @@ ssh-keygen -t ed25519 -N "" -f ~/.ssh/github -C test@example.com
 ssh-add -K ~/.ssh/id_rsa
 ssh-add -K ~/.ssh/github
 
-#SSHキーをクリップボードにコピー
+#SSH公開鍵をクリップボードにコピーし、GitHub等にアップする
 pbcopy < ~/.ssh/id_rsa.pub
 pbcopy < ~/.ssh/github.pub
+
+#sshキーの登録
+```
+# github
+Host github github.com
+  HostName github.com
+  IdentityFile ~/.ssh/id_git_rsa #ここに自分の鍵のファイル名
+  User git
+```
+
 #接続テスト
 ssh -T github
 正常メッセージ
