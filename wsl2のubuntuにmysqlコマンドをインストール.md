@@ -12,7 +12,7 @@ sudo apt update
 
 ## mysql-clientのパッケージを検索
 ```
-ubuntu@FBC-PC63:~$ apt search mysql-client
+ubuntu@syunhigu-carbon:~$ apt search mysql-client
 Sorting... Done
 Full Text Search... Done
 default-mysql-client/noble 1.1.0build1 all
@@ -21,48 +21,49 @@ default-mysql-client/noble 1.1.0build1 all
 default-mysql-client-core/noble 1.1.0build1 all
   MySQL database core client binaries (metapackage)
 
-mysql-client/noble-updates,noble-security 8.0.40-0ubuntu0.24.04.1 all
+mysql-client/noble-updates 8.0.44-0ubuntu0.24.04.2 all
   MySQL database client (metapackage depending on the latest version)
 
-mysql-client-8.0/noble-updates,noble-security 8.0.40-0ubuntu0.24.04.1 amd64
+mysql-client-8.0/noble-updates 8.0.44-0ubuntu0.24.04.2 amd64
   MySQL database client binaries
 
-mysql-client-core-8.0/noble-updates,noble-security 8.0.40-0ubuntu0.24.04.1 amd64
+mysql-client-core-8.0/noble-updates 8.0.44-0ubuntu0.24.04.2 amd64
   MySQL database core client binaries
 
-ubuntu@FBC-PC63:~$ 
+ubuntu@syunhigu-carbon:~$
 ```
 
 ## mysql-client-coreをインストール
 ```
-ubuntu@FBC-PC63:~/wk$ sudo apt install mysql-client-core-8.0
-[sudo] password for ubuntu:
+ubuntu@syunhigu-carbon:~$ sudo apt install mysql-client-core-8.0
 Reading package lists... Done
 Building dependency tree... Done
 Reading state information... Done
 The following NEW packages will be installed:
   mysql-client-core-8.0
-0 upgraded, 1 newly installed, 0 to remove and 6 not upgraded.
-Need to get 0 B/2765 kB of archives.
-After this operation, 61.6 MB of additional disk space will be used.
+0 upgraded, 1 newly installed, 0 to remove and 196 not upgraded.
+Need to get 2740 kB of archives.
+After this operation, 61.7 MB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 mysql-client-core-8.0 amd64 8.0.44-0ubuntu0.24.04.2 [2740 kB]
+Fetched 2740 kB in 2s (1126 kB/s)
 Selecting previously unselected package mysql-client-core-8.0.
 (Reading database ... 40794 files and directories currently installed.)
-Preparing to unpack .../mysql-client-core-8.0_8.0.40-0ubuntu0.24.04.1_amd64.deb ...
-Unpacking mysql-client-core-8.0 (8.0.40-0ubuntu0.24.04.1) ...
-Setting up mysql-client-core-8.0 (8.0.40-0ubuntu0.24.04.1) ...
+Preparing to unpack .../mysql-client-core-8.0_8.0.44-0ubuntu0.24.04.2_amd64.deb ...
+Unpacking mysql-client-core-8.0 (8.0.44-0ubuntu0.24.04.2) ...
+Setting up mysql-client-core-8.0 (8.0.44-0ubuntu0.24.04.2) ...
 Processing triggers for man-db (2.12.0-4build2) ...
-ubuntu@FBC-PC63:~/wk$ 
+ubuntu@syunhigu-carbon:~$
 ```
 
 ## 対象のmysqlサーバーに接続
 ```
-ubuntu@FBC-PC63:~/wk$ mysql -h 127.0.0.1 -u root -p
+ubuntu@syunhigu-carbon:~ $ mysql -h 127.0.0.1 -P 33306 -u root -p
 Enter password:
 Welcome to the MySQL monitor.  Commands end with ; or \g.
-Your MySQL connection id is 6341
-Server version: 5.7.44 MySQL Community Server (GPL)
+Your MySQL connection id is 8
+Server version: 5.5.5-10.4.28-MariaDB-1:10.4.28+maria~ubu2004 mariadb.org binary distribution
 
-Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
 
 Oracle is a registered trademark of Oracle Corporation and/or its
 affiliates. Other names may be trademarks of their respective
@@ -77,9 +78,11 @@ mysql> SHOW DATABASES;
 | information_schema |
 | mysql              |
 | performance_schema |
-| sys                |
+| syunhigubrwp       |
+| syunhigugmwp       |
+| test               |
 +--------------------+
-7 rows in set (0.01 sec)
+6 rows in set (0.00 sec)
 
 mysql>
 ```
