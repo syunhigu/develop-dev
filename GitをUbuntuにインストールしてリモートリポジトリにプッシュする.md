@@ -2,36 +2,37 @@
 https://qiita.com/studio_meowtoon/items/719e6765dd11f17a0b19  
 
 ## 環境
-Windows 11 Home 23H2 を使用  
+Windows 11 Pro 25H2 を使用  
 詳細
 ```
-PS C:\Users\s.higuchi> wsl --version
-WSL バージョン: 2.3.24.0
-カーネル バージョン: 5.15.153.1-2
-WSLg バージョン: 1.0.65
-MSRDC バージョン: 1.2.5620
+PS C:\Users\syunhigu> wsl --version
+WSL バージョン: 2.6.1.0
+カーネル バージョン: 6.6.87.2-1
+WSLg バージョン: 1.0.66
+MSRDC バージョン: 1.2.6353
 Direct3D バージョン: 1.611.1-81528511
 DXCore バージョン: 10.0.26100.1-240331-1435.ge-release
-Windows バージョン: 10.0.22631.4460
-PS C:\Users\s.higuchi> wsl -l
+Windows バージョン: 10.0.26200.7462
+PS C:\Users\syunhigu> wsl -l
 Linux 用 Windows サブシステム ディストリビューション:
-Ubuntu-24.04 (既定)
+Ubuntu-24.04 (既定値)
 docker-desktop
-PS C:\Users\s.higuchi>
+PS C:\Users\syunhigu>
 ```
 
 ## Git のインストールと設定
 * インストール
 ```
-ubuntu@FBC-PC63:~$ sudo apt update
+ubuntu@syunhigu-carbon:~$ sudo apt update
 [sudo] password for ubuntu:
 ～略～
-Fetched 2661 kB in 2s (1164 kB/s)
+Fetched 39.3 MB in 8s (5145 kB/s)
 Reading package lists... Done
 Building dependency tree... Done
 Reading state information... Done
-6 packages can be upgraded. Run 'apt list --upgradable' to see them.
-ubuntu@FBC-PC63:~$ sudo apt install git
+198 packages can be upgraded. Run 'apt list --upgradable' to see them.
+ubuntu@syunhigu-carbon:~$ sudo apt install git
+[sudo] password for ubuntu:
 Reading package lists... Done
 Building dependency tree... Done
 Reading state information... Done
@@ -41,26 +42,26 @@ Suggested packages:
   git-daemon-run | git-daemon-sysvinit git-doc git-email git-gui gitk gitweb git-cvs git-mediawiki git-svn
 The following packages will be upgraded:
   git git-man
-2 upgraded, 0 newly installed, 0 to remove and 4 not upgraded.
-Need to get 0 B/4779 kB of archives.
-After this operation, 2048 B of additional disk space will be used.
+2 upgraded, 0 newly installed, 0 to remove and 196 not upgraded.
+Need to get 0 B/4780 kB of archives.
+After this operation, 1024 B of additional disk space will be used.
 Do you want to continue? [Y/n] Y
-(Reading database ... 40820 files and directories currently installed.)
-Preparing to unpack .../git-man_1%3a2.43.0-1ubuntu7.2_all.deb ...
-Unpacking git-man (1:2.43.0-1ubuntu7.2) over (1:2.43.0-1ubuntu7.1) ...
-Preparing to unpack .../git_1%3a2.43.0-1ubuntu7.2_amd64.deb ...
-Unpacking git (1:2.43.0-1ubuntu7.2) over (1:2.43.0-1ubuntu7.1) ...
-Setting up git-man (1:2.43.0-1ubuntu7.2) ...
-Setting up git (1:2.43.0-1ubuntu7.2) ...
+(Reading database ... 40794 files and directories currently installed.)
+Preparing to unpack .../git-man_1%3a2.43.0-1ubuntu7.3_all.deb ...
+Unpacking git-man (1:2.43.0-1ubuntu7.3) over (1:2.43.0-1ubuntu7.1) ...
+Preparing to unpack .../git_1%3a2.43.0-1ubuntu7.3_amd64.deb ...
+Unpacking git (1:2.43.0-1ubuntu7.3) over (1:2.43.0-1ubuntu7.1) ...
+Setting up git-man (1:2.43.0-1ubuntu7.3) ...
+Setting up git (1:2.43.0-1ubuntu7.3) ...
 Processing triggers for man-db (2.12.0-4build2) ...
-ubuntu@FBC-PC63:~$ 
+ubuntu@syunhigu-carbon:~$
 ```
 
 * バージョン確認
 ```
-ubuntu@FBC-PC63:~$ git --version
+ubuntu@syunhigu-carbon:~$ git --version
 git version 2.43.0
-ubuntu@FBC-PC63:~$
+ubuntu@syunhigu-carbon:~$
 ```
 
 * 設定
@@ -98,15 +99,16 @@ git config --global merge.conflictStyle diff3
 ubuntu@FBC-PC63:~$ git config -l
 user.name=example
 user.email=example@example.com
-core.autocrlf=false
-core.ignorecase=false
-core.quotepath=false
 color.ui=auto
 color.diff=auto
 color.status=auto
 color.branch=auto
+core.ignorecase=false
+core.quotepath=false
+core.precomposeunicode=true
+core.autocrlf=false
 merge.conflictstyle=diff3
-ubuntu@FBC-PC63:~$
+ubuntu@syunhigu-carbon:~$
 ```
 
 ## 暗号キー の作成及び設定
@@ -116,76 +118,69 @@ touch ~/.ssh/config
 chmod 700 ~/.ssh
 chmod 600 ~/.ssh/*
 ```
-ubuntu@FBC-PC63:~$ mkdir ~/.ssh
-ubuntu@FBC-PC63:~$ ll -a
-total 68
-drwxr-x--- 10 ubuntu ubuntu 4096 Jan 18 14:36 ./
-drwxr-xr-x  3 root   root   4096 Jan 17 11:44 ../
-lrwxrwxrwx  1 ubuntu ubuntu   27 Jan 17 16:58 .aws -> /mnt/c/Users/s.higuchi/.aws/
-lrwxrwxrwx  1 ubuntu ubuntu   29 Jan 17 16:58 .azure -> /mnt/c/Users/s.higuchi/.azure/
--rw-------  1 ubuntu ubuntu  735 Jan 18 12:11 .bash_history
--rw-r--r--  1 ubuntu ubuntu  220 Jan 17 11:44 .bash_logout
--rw-r--r--  1 ubuntu ubuntu 3771 Jan 17 11:44 .bashrc
-drwx------  2 ubuntu ubuntu 4096 Jan 17 11:44 .cache/
-drwxr-xr-x  4 ubuntu ubuntu 4096 Jan 17 16:58 .docker/
--rw-r--r--  1 ubuntu ubuntu  222 Jan 18 14:22 .gitconfig
-drwxr-xr-x  2 ubuntu ubuntu 4096 Jan 18 00:56 .landscape/
--rw-------  1 ubuntu ubuntu   20 Jan 18 14:34 .lesshst
--rw-r--r--  1 ubuntu ubuntu    0 Jan 18 00:56 .motd_shown
--rw-------  1 ubuntu ubuntu   42 Jan 18 10:19 .mysql_history
--rw-r--r--  1 ubuntu ubuntu  807 Jan 17 11:44 .profile
-drwxr-xr-x  2 ubuntu ubuntu 4096 Jan 18 14:36 .ssh/
--rw-r--r--  1 ubuntu ubuntu    0 Jan 18 02:13 .sudo_as_admin_successful
-drwxr-xr-x  4 ubuntu ubuntu 4096 Jan 17 23:35 .vscode-remote-containers/
-drwxr-xr-x  2 ubuntu ubuntu 4096 Jan 18 13:47 fbc/
-drwxr-xr-x  3 ubuntu ubuntu 4096 Jan 17 21:34 meitetsu/
-drwxr-xr-x  4 ubuntu ubuntu 4096 Jan 18 10:19 wk/
-ubuntu@FBC-PC63:~$ touch ~/.ssh/config
-ubuntu@FBC-PC63:~$ ll .ssh/
+ubuntu@syunhigu-carbon:~$ ll -a
+total 44
+drwxr-x--- 5 ubuntu ubuntu 4096 Jan  9 00:01 ./
+drwxr-xr-x 3 root   root   4096 Nov 29 23:05 ../
+lrwxrwxrwx 1 ubuntu ubuntu   26 Nov 30 00:57 .aws -> /mnt/c/Users/syunhigu/.aws/
+lrwxrwxrwx 1 ubuntu ubuntu   28 Nov 30 00:57 .azure -> /mnt/c/Users/syunhigu/.azure/
+-rw------- 1 ubuntu ubuntu  561 Dec  6 17:19 .bash_history
+-rw-r--r-- 1 ubuntu ubuntu  220 Nov 29 23:05 .bash_logout
+-rw-r--r-- 1 ubuntu ubuntu 3771 Nov 29 23:05 .bashrc
+drwx------ 2 ubuntu ubuntu 4096 Nov 29 23:05 .cache/
+drwxr-xr-x 4 ubuntu ubuntu 4096 Nov 30 00:57 .docker/
+-rw-r--r-- 1 ubuntu ubuntu  239 Jan  9 00:00 .gitconfig
+-rw------- 1 ubuntu ubuntu   20 Jan  9 00:01 .lesshst
+-rw-rw-r-- 1 ubuntu ubuntu    0 Jan  8 23:07 .motd_shown
+-rw-r--r-- 1 ubuntu ubuntu  807 Nov 29 23:05 .profile
+drwx------ 2 ubuntu ubuntu 4096 Nov 29 23:22 .ssh/
+-rw-r--r-- 1 ubuntu ubuntu    0 Dec  6 17:19 .sudo_as_admin_successful
+ubuntu@syunhigu-carbon:~$
+ubuntu@syunhigu-carbon:~$ ll .ssh/
 total 8
-drwxr-xr-x  2 ubuntu ubuntu 4096 Jan 18 14:39 ./
-drwxr-x--- 10 ubuntu ubuntu 4096 Jan 18 14:36 ../
--rw-r--r--  1 ubuntu ubuntu    0 Jan 18 14:39 config
-ubuntu@FBC-PC63:~$ chmod 700 ~/.ssh
-ubuntu@FBC-PC63:~$ chmod 600 ~/.ssh/*
-ubuntu@FBC-PC63:~$
+ubuntu@syunhigu-carbon:~$ chmod 700 ~/.ssh
+ubuntu@syunhigu-carbon:~$ chmod 600 ~/.ssh/*
+ubuntu@syunhigu-carbon:~$
 ```
 
 * 暗号キーの作成
 ```
-ubuntu@FBC-PC63:~$ cd .ssh/
-ubuntu@FBC-PC63:~/.ssh$ pwd
-/home/ubuntu/.ssh
-ubuntu@FBC-PC63:~/.ssh$ ll
+ubuntu@syunhigu-carbon:~$ cd .ssh/
+ubuntu@syunhigu-carbon:~/.ssh$ ll
 total 8
-drwx------  2 ubuntu ubuntu 4096 Jan 18 14:39 ./
-drwxr-x--- 10 ubuntu ubuntu 4096 Jan 18 14:36 ../
--rw-------  1 ubuntu ubuntu    0 Jan 18 14:39 config
-ubuntu@FBC-PC63:~/.ssh$ ssh-keygen -t rsa
+drwx------ 2 ubuntu ubuntu 4096 Nov 29 23:22 ./
+drwxr-x--- 5 ubuntu ubuntu 4096 Jan  9 00:01 ../
+-rw------- 1 ubuntu ubuntu    0 Nov 29 23:22 config
+ubuntu@syunhigu-carbon:~/.ssh$ pwd
+/home/ubuntu/.ssh
+ubuntu@syunhigu-carbon:~/.ssh$ ll
+total 8
+drwx------ 2 ubuntu ubuntu 4096 Nov 29 23:22 ./
+drwxr-x--- 5 ubuntu ubuntu 4096 Jan  9 00:01 ../
+-rw------- 1 ubuntu ubuntu    0 Nov 29 23:22 config
+ubuntu@syunhigu-carbon:~/.ssh$ ssh-keygen -t rsa
 Generating public/private rsa key pair.
-Enter file in which to save the key (/home/ubuntu/.ssh/id_rsa): wsl_ubuntu_fbc_github
+Enter file in which to save the key (/home/ubuntu/.ssh/id_rsa): wsl_ubuntu_github
 Enter passphrase (empty for no passphrase):
 Enter same passphrase again:
-Your identification has been saved in wsl_ubuntu_fbc_github
-Your public key has been saved in wsl_ubuntu_fbc_github.pub
+Your identification has been saved in wsl_ubuntu_github
+Your public key has been saved in wsl_ubuntu_github.pub
 The key fingerprint is:
 ～略～
-ubuntu@FBC-PC63:~/.ssh$ ll
-total 28
-drwx------  2 ubuntu ubuntu 4096 Jan 18 14:58 ./
-drwxr-x--- 10 ubuntu ubuntu 4096 Jan 18 14:55 ../
--rw-------  1 ubuntu ubuntu  306 Jan 18 14:55 config
--rw-------  1 ubuntu ubuntu 2602 Jan 18 14:47 wsl_ubuntu
--rw-r--r--  1 ubuntu ubuntu  569 Jan 18 14:47 wsl_ubuntu.pub
--rw-------  1 ubuntu ubuntu 2602 Jan 18 14:58 wsl_ubuntu_fbc_github
--rw-r--r--  1 ubuntu ubuntu  569 Jan 18 14:58 wsl_ubuntu_fbc_github.pub
-ubuntu@FBC-PC63:~/.ssh$
+ubuntu@syunhigu-carbon:~/.ssh$ ll
+total 16
+drwx------ 2 ubuntu ubuntu 4096 Jan  9 00:16 ./
+drwxr-x--- 5 ubuntu ubuntu 4096 Jan  9 00:01 ../
+-rw------- 1 ubuntu ubuntu    0 Nov 29 23:22 config
+-rw------- 1 ubuntu ubuntu 2610 Jan  9 00:16 wsl_ubuntu_github
+-rw-r--r-- 1 ubuntu ubuntu  576 Jan  9 00:16 wsl_ubuntu_github.pub
+ubuntu@syunhigu-carbon:~/.ssh$
 ```
 
 * 暗号キーの設定
 ```
-ubuntu@FBC-PC63:~/.ssh$ vi config
-ubuntu@FBC-PC63:~/.ssh $ cat config
+ubuntu@syunhigu-carbon:~/.ssh$ vi config
+ubuntu@syunhigu-carbon:~/.ssh$ cat config
 Host *
   StrictHostKeyChecking no
 #  UserKnownHostsFile=/dev/null
@@ -195,20 +190,20 @@ Host *
 #  UseKeychain yes
 #  IdentitiesOnly yes
 
-# fbc_mail_delivery_github
-Host fbc_github github.com
+# github-private
+Host github-private
   HostName github.com
-  IdentityFile ~/.ssh/wsl_ubuntu_fbc_github
+  IdentityFile ~/.ssh/wsl_ubuntu_github
   User git
-ubuntu@FBC-PC63:~/.ssh $
+ubuntu@syunhigu-carbon:~/.ssh$
 ```
 
 * 暗号キーのgitへ登録
 * 接続テスト  
 ※Hi～ のメッセージが出ればok  
 ```
-ubuntu@FBC-PC63:~/.ssh$ ssh -T fbc_github
+ubuntu@syunhigu-carbon:~/.ssh$ ssh -T github-private
 Warning: Permanently added 'github.com' (ED25519) to the list of known hosts.
-Hi fbc-syunhigu! You've successfully authenticated, but GitHub does not provide shell access.
-ubuntu@FBC-PC63:~/.ssh$ 
+Hi syunhigu! You've successfully authenticated, but GitHub does not provide shell access.
+ubuntu@syunhigu-carbon:~/.ssh$
 ```
