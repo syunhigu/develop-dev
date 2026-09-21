@@ -16,23 +16,39 @@ wsl --version
 
 ```powershell
 wsl --shutdown
-wsl --export Ubuntu-24.04 D:\wsl-backup\ubuntu-2404-before-upgrade.tar
+wsl --export Ubuntu-24.04 C:\wsl-backup\ubuntu-2404-before-upgrade.tar
 ```
 
 復元方法も事前に確認しておく:
 
 ```powershell
-wsl --import Ubuntu-24.04-Restore C:\WSL\Ubuntu-24.04-Restore C:\backup\ubuntu2404_backup.tar --version 2
+wsl --import ubuntu-24.04-restore C:\wsl-restore\ubuntu-24.04-restore C:\wsl-backup\ubuntu-2404-before-upgrade.tar --version 2
 ```
 
 ```powershell
-wsl -d Ubuntu-24.04-Restore
+wsl -d ubuntu-24.04-restore
 ```
 
 ### 3. Ubuntu側のパッケージを最新化
 
 ```bash
 sudo apt update && sudo apt full-upgrade -y
+```
+
+### 4. アップグレード用ツールを入れる
+
+```bash
+sudo apt install update-manager-core -y
+```
+
+設定確認
+```bash
+cat /etc/update-manager/release-upgrades
+```
+
+LTS 版から LTS 版へアップグレードしたい場合は、以下になっていること。
+```bash
+Prompt=lts
 ```
 
 ---
@@ -47,6 +63,29 @@ sudo do-release-upgrade -d
 
 - `-d` なしでは、24.04 LTS → 26.04 LTS への通常アップグレード通知がまだ有効になっていない場合がある(その場合は `-d` を付ける)。
 - 安定性を優先するなら、急いで `-d` で上げるより **26.04.1 LTS リリース後**、通常アップグレード経路が開放されてから移行する方が安全。
+
+1. 画面の指示に従う
+アップグレード中は、何度か確認が表示される。
+よくある確認は以下。
+
+| 確認内容 | おすすめ |
+| -- | -- |
+| 古いパッケージを削除するか | 基本的には削除で OK |
+| サービスを再起動してよいか | 基本的には OK |
+| 設定ファイルを置き換えるか | 自分で編集している場合は注意 |
+
+2. WSL を再起動
+アップグレードが完了したら、PowerShell から WSL を完全停止
+```bash
+wsl --shutdown
+```
+
+再度 Ubuntu を起動して、バージョンを確認。
+```bash
+cat /etc/os-release
+```
+
+`VERSION_ID="26.04"` のように表示されていれば完了。
 
 ### WSL2特有の注意点: systemd/cgroup設定
 
