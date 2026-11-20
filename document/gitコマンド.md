@@ -1,19 +1,21 @@
-Git 初期設定
+# Git 初期設定
+## 参考
 https://qiita.com/ucan-lab/items/aadbedcacbc2ac86a2b3
 GitHubでssh接続する手順~公開鍵・秘密鍵の生成から~
 https://qiita.com/shizuma/items/2b2f873a0034839e47ce
 
-#ディレクトリ、ファイル設定
+## ディレクトリ、ファイル設定
+```bash
 mkdir ~/.ssh
 touch ~/.ssh/config
 chmod 700 ~/.ssh
 chmod 600 ~/.ssh/*
 xattr -cr ~/.ssh
-
-#config初期設定
 ```
+## config初期設定
+```bash
 $ vi ~/.ssh/config
-
+<< COMMENTOUT
 # 全ホストの共通設定
 Host *
   StrictHostKeyChecking no
@@ -23,6 +25,7 @@ Host *
 #  AddKeysToAgent yes
 #  UseKeychain yes
   IdentitiesOnly yes
+COMMENTOUT
 ```
 * Host * 全ホストの共通設定
 * OpenSSHの警告メッセージを非表示
@@ -37,56 +40,59 @@ Host *
 * 認証の際に、ssh_config ファイルで指定された秘密鍵のみを使用するよう指定
   * IdentitiesOnly yes
 
-#global .gitignore 設定(推奨)
+## global .gitignore 設定(推奨)
+```bash
 mkdir -p ~/.config/git
+```
 ディレクトリがない場合作成する。
 .DS_Store
 [Git] .gitignoreの仕様詳解
 https://qiita.com/anqooqie/items/110957797b3d5280c44f
 
-＃初期設定(お好み)
+＃# 初期設定(お好み)
+```bash
 git config --global user.name "test"
 git config --global user.email test@example.com
 git config --global color.ui auto
 git config --global color.diff auto
 git config --global color.status auto
 git config --global color.branch auto
-#ファイル名の大文字・小文字の変更を検知する。
+# ファイル名の大文字・小文字の変更を検知する。
 git config --global core.ignorecase false
-#日本語ファイル名をエスケープせずに表示
+# 日本語ファイル名をエスケープせずに表示
 git config --global core.quotepath false
-#濁点つきのディレクトリ・ファイルが分けて表示されてしまう UTF8-MAC 問題の解決方法
+# 濁点つきのディレクトリ・ファイルが分けて表示されてしまう UTF8-MAC 問題の解決方法
 git config --global core.precomposeunicode true
-#マージコンフリクトを見やすくする
+# マージコンフリクトを見やすくする
 git config --global merge.conflictStyle diff3
-#git rebase 対話モード時にも標準モードのようにブランチを更新する
-※ Git v2.38.0 以降のオプション
+# git rebase 対話モード時にも標準モードのようにブランチを更新する
+# ※ Git v2.38.0 以降のオプション
 git config --global rebase.updateRefs true
-#git push 時に同じ名前のリモートブランチを作成する
+# git push 時に同じ名前のリモートブランチを作成する
 git config --global push.default current
-#デフォルトブランチを main に変更する
-※ 2020/10/1 からデフォルトブランチがmasterからmainに変更された。
-The default branch for newly-created repositories is now main
-https://github.blog/changelog/2020-10-01-the-default-branch-for-newly-created-repositories-is-now-main/
+# デフォルトブランチを main に変更する
+# ※ 2020/10/1 からデフォルトブランチがmasterからmainに変更された。
+# The default branch for newly-created repositories is now main
+# https://github.blog/changelog/2020-10-01-the-default-branch-for-newly-created-repositories-is-now-main/
 git config --global init.defaultBranch main
-設定不要かもしれないが、git init時のデフォルトブランチを指定できる。
-#git fetch --prune オプションを常に有効化
+# 設定不要かもしれないが、git init時のデフォルトブランチを指定できる。
+# git fetch --prune オプションを常に有効化
 git config --global fetch.prune true
---prune オプションは削除されたリモートの追跡ブランチをローカルリポジトリに反映する。
-#git status 追跡されていないファイルはすべて表示
+# --prune オプションは削除されたリモートの追跡ブランチをローカルリポジトリに反映する。
+# git status 追跡されていないファイルはすべて表示
 git config --global status.showUntrackedFiles all
-追跡されていないファイルはすべて表示させたい。
-※ 設定しておかないと新規ディレクトリ配下のファイルが表示されなかったりする。
-#改行コードの自動変換機能
+# 追跡されていないファイルはすべて表示させたい。
+# ※設定しておかないと新規ディレクトリ配下のファイルが表示されなかったりする。
+# 改行コードの自動変換機能
 git config --global core.autocrlf input
-input の場合は改行コードをコミット時に LF に変換してくれる。
-(Mac, Linuxは LF, Windowsは CRLF がデフォルトの改行コード。)
-この自動変換を無効にしたい場合は false を設定。
-#git パーミッションの変更を無視する
+# input の場合は改行コードをコミット時に LF に変換してくれる。
+# (Mac, Linuxは LF, Windowsは CRLF がデフォルトの改行コード。)
+# この自動変換を無効にしたい場合は false を設定。
+# git パーミッションの変更を無視する
 git config --global core.filemode false
-
-#設定まとめ
 ```
+## 設定まとめ
+```bash
 git config --global rebase.updateRefs true
 git config --global push.default current
 git config --global init.defaultBranch main
@@ -99,41 +105,48 @@ git config --global core.quotepath false
 git config --global merge.conflictStyle zdiff3
 ```
 
-#ローカルの設定
+## ローカルの設定
+```bash
 git config -l
-#グローバルの設定
+```
+## グローバルの設定
+```bash
 git config --global -l
-
-#ssh-agentを起動
+```
+## ssh-agentを起動
+```bash
 eval "$(ssh-agent -s)"
-#秘密鍵の登録状況を確認
+# 秘密鍵の登録状況を確認
 ssh-add -l
-※登録なし表示
-The agent has no identities.
-※起動前表示
-Could not open a connection to your authentication agent.
-
-#SSHキーの確認
+# ※登録なし表示
+# The agent has no identities.
+# ※起動前表示
+# Could not open a connection to your authentication agent.
+```
+## SSHキーの確認
+```bash
 ls -al ~/.ssh
 #新しいSSHキーを生成する
 ssh-keygen -t rsa -b 4096 -C "test@example.com"
 ssh-keygen -t ed25519 -N "" -f ~/.ssh/github -C test@example.com
+<< COMMENTOUT
 -t : 鍵の種類を選択。安全面と性能面で最強なEd25519アルゴリズム一択です。
 -C : GitHubに設定したメールアドレスを指定するのが一般的なようです。
 -f : ファイル名を指定。デフォルトは ~/.ssh/id_ed25519
 -N : パスフレーズの指定。 "" でパスフレーズなし
 セキュリティを上げるなら設定する
+COMMENTOUT
 
-#SSH秘密鍵をssh-agentに追加し、パスフレーズをキーチェーンに保存
+# SSH秘密鍵をssh-agentに追加し、パスフレーズをキーチェーンに保存
 ssh-add -K ~/.ssh/id_rsa
 ssh-add -K ~/.ssh/github
 
-#SSH公開鍵をクリップボードにコピーし、GitHub等にアップする
+# SSH公開鍵をクリップボードにコピーし、GitHub等にアップする
 pbcopy < ~/.ssh/id_rsa.pub
 pbcopy < ~/.ssh/github.pub
-
-#sshキーの登録
 ```
+## sshキーの登録
+```bash
 # github
 Host github github.com
   HostName github.com
@@ -141,8 +154,10 @@ Host github github.com
   User git
 ```
 
-#接続テスト
+## 接続テスト
+```bash
 ssh -T github
+<< COMMENTOUT
 正常メッセージ
 Hi syunhigu! You've successfully authenticated, but GitHub does not provide shell access.
 ※下記警告メッセージが出た場合は後述のコマンド実施
@@ -154,191 +169,220 @@ WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!
 ※/Users/syunhigu/.ssh/known_hostsに同じ名前で存在しているため
 →ipアドレスは上記ファイルから確認する
 ☆コマンド実施時は上記ファイルは閉じておくこと
+COMMENTOUT
 ssh-keygen -R 52.192.72.89
+```
 
 ------------------------------------
-#gitクローン
+## gitクローン
+```bash
 #クローンしたいフォルダに移動
 cd フォルダ
 git clone https://github.com/syunhigu/develop-dev.git
-#ローカルのブランチからブランチを作成する方法
-#ブランチ一覧表示
+# ローカルのブランチからブランチを作成する方法
+# ブランチ一覧表示
 git branch -a
-#ローカルブランチの一覧を表示
+# ローカルブランチの一覧を表示
 git branch
-#リモートブランチの一覧を表示
+# リモートブランチの一覧を表示
 git branch --remote
-#ローカルの追跡ブランチの情報を更新（リモートブランチの情報と同期）
+# ローカルの追跡ブランチの情報を更新（リモートブランチの情報と同期）
 git remote update -p
-#ブランチを作る元のブランチに切り替える
+# ブランチを作る元のブランチに切り替える
 git checkout master
-#ブランチを作成
+# ブランチを作成
 git checkout -b 作成するブランチ名
-#ブランチをリモートに登録
+# ブランチをリモートに登録
 git push -u origin 作成したブランチ名
 
-#リモートブランチから作る方法
-#リモートブランチからローカルブランチを作成
+# リモートブランチから作る方法
+# リモートブランチからローカルブランチを作成
 git checkout -b ローカルに作成するブランチ名 origin/作成元のリモートのブランチ名
-#ブランチ一覧表示
+# ブランチ一覧表示
 git branch -a
-#ブランチをリモートに登録
+# ブランチをリモートに登録
 git push -u origin 作成したブランチ
 
-#リモートリポジトリに登録する方法
-※あらかじめリモートリポジトリを作成してある場合
-#対象フォルダ配下でローカルリポジトリ作成
+# リモートリポジトリに登録する方法
+# ※あらかじめリモートリポジトリを作成してある場合
+# 対象フォルダ配下でローカルリポジトリ作成
 git init
 git branch -m master
-#push対象ファイルをインデックスに追加
+# push対象ファイルをインデックスに追加
 git add xxx
-#コミット
+# コミット
 git commit -m "xxx"
-#リモートリポジトリに追加
+# リモートリポジトリに追加
 git remote add origin https://github.com/ユーザーID/リモートリポジトリ名.git
 git remote add origin git@github.com:ユーザーID/リモートリポジトリ名.git
-#リモートリポジトリにpush
+# リモートリポジトリにpush
 git push -u origin master
+```
 
 ------------------------------------
-#コミット
-#変更したファイルの一覧を確認
+## コミット
+```bash
+# 変更したファイルの一覧を確認
 git status
+<< COMMENTOUT
 ※メッセージ内容
 ・modified:修正したファイル
 ・deleted:削除したファイル
 ・Untracked files:新規作成したファイル
-#変更したファイルのソースコードを確認
+COMMENTOUT
+# 変更したファイルのソースコードを確認
 git diff
-#変更点に問題なければコミット
-#コミットしたいファイルを選択
+# 変更点に問題なければコミット
+# コミットしたいファイルを選択
 git add xxx
-※例
+# ※例
 git add app/scripts/controllers/kakugenctrl.js
-#消す対象のファイルをコミット対象とする時
+# 消す対象のファイルをコミット対象とする時
 git rm app/scripts/controllers/detail.jsbk
-#git管理下にある複数のファイルをrmしたときに、それらを一括してgit rmしたい場合
+# git管理下にある複数のファイルをrmしたときに、それらを一括してgit rmしたい場合
 git rm `git ls-files --deleted`
-#ディレクトリ単位でコミットしたい時は以下のようにディレクトリ指定も可能
+# ディレクトリ単位でコミットしたい時は以下のようにディレクトリ指定も可能
 git add ./
-#コミット対象を確認する
+# コミット対象を確認する
 git status
-#コミットする
+# コミットする
 git commit
-#-m オプションを使用するとコメントを同時にセットできる
+# -m オプションを使用するとコメントを同時にセットできる
 git commit -m "格言画面へ飛ぶように修正"
-#githubへpush
+# githubへpush
 git push origin xxx
+```
 
 ------------------------------------
-#push前に直前のコミットをなかったことにする方法
-#ローカルリポジトリ内で下記コマンドを実行して直前のコミットをなかったことにしてソースの状態も直前のコミットのをする前の状態に戻す。
+## push前に直前のコミットをなかったことにする方法
+```bash
+# ローカルリポジトリ内で下記コマンドを実行して直前のコミットをなかったことにしてソースの状態も直前のコミットのをする前の状態に戻す。
 git reset --hard HEAD^
-#ローカルリポジトリ内で下記コマンドを実行して直前のコミットをなかったことにしてソースはそのままにする。
+# ローカルリポジトリ内で下記コマンドを実行して直前のコミットをなかったことにしてソースはそのままにする。
 git reset --soft HEAD^
+```
 
 ------------------------------------
-#リバートしたいとき
-#特定コミットの処理を、うち消すコミットを作成する
-https://www.sejuku.net/blog/71634#index_id2
+## リバートしたいとき
+```bash
+# 特定コミットの処理を、うち消すコミットを作成する
+# https://www.sejuku.net/blog/71634#index_id2
 git revert <打ち消したいコミットID>
+```
 
 ------------------------------------
-#リバート取り消したいとき
-https://mebee.info/2021/06/28/post-30245/
+## リバート取り消したいとき
+```bash
+# https://mebee.info/2021/06/28/post-30245/
 git revert --abort
+```
 
 ------------------------------------
-#マージしたい時
-#masterブランチにマージするとき
-#masterブランチに移動
+## マージしたい時
+```bash
+# masterブランチにマージするとき
+# masterブランチに移動
 git checkout master
 # masterブランチにfeatureブランチをマージします
 git merge feature/58
-#コミットする　※必要に応じて
+# コミットする　※必要に応じて
 git commit -m "feature/58"
-#githubへpush
+# githubへpush
 git push origin xxx
+```
 
 ------------------------------------
-#マージしたけどやっぱりやめたい時のやり方
-#その1 「マージしたらコンフリクトした。やっぱりやめよう。」
+## マージしたけどやっぱりやめたい時のやり方
+```bash
+# その1 「マージしたらコンフリクトした。やっぱりやめよう。」
 git merge --abort
-#その2 「マージしたらコンフリクトした。コンフリクトを解消しようといろいろ編集した。でもやっぱりやめよう。」
+# その2 「マージしたらコンフリクトした。コンフリクトを解消しようといろいろ編集した。でもやっぱりやめよう。」
 git reset --hard HEAD
-#その3 「マージすべて完了した。でもやっぱりやめよう。」パート1
+# その3 「マージすべて完了した。でもやっぱりやめよう。」パート1
 git revert -m 1 <merge_commit>
+<< COMMENTOUT
 マージコミットの場合、親が2つに分かれる。
 revertコマンドを使う場合は、revertした結果どちらの親に戻すのかを-m 数字で指定する。数字が親を表す。
 詳しくはこちらの記事参照
 https://qiita.com/chihiro/items/2fa827d0eac98109e7ee
 ※この方法の場合、取り消したマージコミットに含まれていた変更を再度マージすることはできなくなる。
-#その3 「マージすべて完了した。でもやっぱりやめよう。」パート2
+COMMENTOUT
+# その3 「マージすべて完了した。でもやっぱりやめよう。」パート2
 git reset --hard ORIG_HEAD
-マージが完了(コミットまで)したけれども、やっぱりマージ前に戻したい、というとき、パート2。
-※この方法は一度できたコミットを取り消すことになる。
-revertコマンドとは違い、「コミットを取り消した」という履歴も残らない。
+# マージが完了(コミットまで)したけれども、やっぱりマージ前に戻したい、というとき、パート2。
+# ※この方法は一度できたコミットを取り消すことになる。
+# revertコマンドとは違い、「コミットを取り消した」という履歴も残らない。
+```
 
 ------------------------------------
-#ブランチ名変更
-##ローカルブランチ名の変更
+## ブランチ名変更
+```bash
+# ローカルブランチ名の変更
 git branch -m 古いブランチ名 新しいブランチ名
 git branch -m hotfix/develop-environment
-##他のブランチ（現在のブランチ以外）の名前を変更する場合
+# 他のブランチ（現在のブランチ以外）の名前を変更する場合
 git branch -m 古いブランチ名 新しいブランチ名
-例：
+# 例：
 git branch -m old-branch-name new-branch-name
 
 # 今いるブランチの名前を変更する場合
 git branch -m 新しいブランチ名
-##リモートブランチ名の変更
+# リモートブランチ名の変更
+<< COMMENTOUT
 手順としては、
 1. ローカルのブランチ名を変更
 2. 変更したブランチを新たにリモートへpush
 3. 間違えてpushしたリモートブランチを削除
+COMMENTOUT
 git branch -m 古いブランチ名 新しいブランチ名
 git push -u origin 現在のブランチ名      // $ git push -u origin HEAD とするとブランチ名を入力しなてもpushできるので便利。
 git push origin :リモートのブランチ名
+```
 
 ------------------------------------
-# その他
+## その他
 gitでmasterブランチをチェックアウトしてからファイル修正後ブランチ名変更してプッシュする場合は、
 以下の手順でやれば問題なし
-## master ブランチをチェックアウト
+```bash
+# master ブランチをチェックアウト
 git checkout master
-## 最新に更新（必須ではないが推奨）
+# 最新に更新（必須ではないが推奨）
 git pull origin master
-## ファイルを修正
-## 名前を付けて新しいブランチに変更（ここで初めてブランチを作る）
+# ファイルを修正
+# 名前を付けて新しいブランチに変更（ここで初めてブランチを作る）
 git checkout -b new-branch-name
-## 変更をステージ＆コミット
+# 変更をステージ＆コミット
 git add .
 git commit -m "変更内容の説明"
-## リモートにプッシュ
+# リモートにプッシュ
 git push origin new-branch-name
-
-#上記をhotfixブランチでやる場合
-## 最新のmasterをチェックアウトして更新
+```
+* 上記をhotfixブランチでやる場合
+```bash
+# 最新のmasterをチェックアウトして更新
 git checkout master
 git pull origin master
-## hotfixブランチを作成（ここで分岐）
+# hotfixブランチを作成（ここで分岐）
 git checkout -b hotfix/some-fix-name
 # 修正作業
-## 変更をステージ＆コミット
+# 変更をステージ＆コミット
 git add .
 git commit -m "Hotfix: 説明"
-## リモートにブランチを作成してプッシュ
+# リモートにブランチを作成してプッシュ
 git push origin hotfix/some-fix-name
+```
 
 ------------------------------------
-#ローカルブランチ削除
+## ローカルブランチ削除
+```bash
 git branch --delete develop
-#ローカルブランチ強制削除
+# ローカルブランチ強制削除
 git branch -D develop
-#リモートブランチ削除
+# リモートブランチ削除
 git push --delete origin develop
+```
 
-－－－－－－－－－－－－－－－－－－－－
+------------------------------------
 # 目的
 複数のGitHubアカウント（例えば「個人用」と「仕事用」）を切り替えてリポジトリを操作できるようにする。
 ## 手順概要
@@ -349,19 +393,17 @@ git push --delete origin develop
 
 ## 手順
 1. SSH鍵を作成
-```
+```bash
 # 個人アカウント用
 ssh-keygen -t ed25519 -C "your_personal_email@example.com" -f ~/.ssh/id_ed25519_personal
-
 # 仕事アカウント用
 ssh-keygen -t ed25519 -C "your_work_email@example.com" -f ~/.ssh/id_ed25519_work
 ```
 
 2. GitHubに公開鍵を登録
-
 3. SSH設定ファイル（~/.ssh/config）を編集
 ※ ファイルが存在しない場合は新規作成。改行・インデントに注意。
-```
+```text
 # 個人アカウント
 Host github-personal
   HostName github.com
@@ -377,14 +419,14 @@ Host github-work
 
 4. Gitのユーザー設定
 各リポジトリで使うユーザー名とメールアドレスを設定。
-```
+```bash
 # リポジトリディレクトリで実行
 git config user.name "Your Name"
 git config user.email "your_email@example.com"
 ```
 
 5. リポジトリのclone時にHostを指定
-```
+```bash
 # 個人アカウントからクローン
 git clone git@github-personal:username/repo.git
 
@@ -393,5 +435,5 @@ git clone git@github-work:username/repo.git
 ```
 
 補足
-・すでにclone済みのリポジトリの .git/config を編集して url を変更してもOK。
-・GitHub CLI（gh）でのアカウント切り替えも可能だが、SSHの切り替えのほうが一般的で確実。
+* すでにclone済みのリポジトリの .git/config を編集して url を変更してもOK。
+* GitHub CLI（gh）でのアカウント切り替えも可能だが、SSHの切り替えのほうが一般的で確実。
