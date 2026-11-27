@@ -171,7 +171,7 @@ claude plugin install figma@claude-plugins-official
 
 1. Claude Code を起動中なら再起動する (`claude` を起動し直す)
 2. Claude Code で `/plugin` と入力し、Enter を押す
-3. 右矢印キーで **Installed** タブを開く
+3. 右矢印キーで **~~Installed~~Discover** タブを開く
 
     ![/plugin の Installed タブ](./img/figma-setup/Figma_プラグインInstalled.png)
 
@@ -182,7 +182,7 @@ claude plugin install figma@claude-plugins-official
 
 6. Claude Code に戻って再度 `/plugin` を開き、`figma` が connected になっていれば完了
 
-    ![プラグインの接続確認](./img/figma-setup/Figma_プラグイン接続確認.png)
+<!--    ![プラグインの接続確認](./img/figma-setup/Figma_プラグイン接続確認.png) -->
 
 ### 3-2. 方法2: `claude mcp add` で手動登録する
 
@@ -197,7 +197,7 @@ claude mcp add --transport http --scope user figma https://mcp.figma.com/mcp
 1. Claude Code を起動し直す
 2. `/mcp` と入力 → **figma** を選ぶ → **Authenticate** を選ぶ
 
-    ![/mcp で Authenticate](./img/figma-setup/Figma_mcp認証.png)
+<!--    ![/mcp で Authenticate](./img/figma-setup/Figma_mcp認証.png) -->
 
 3. ブラウザが開くので、Figma にログインして **Allow access** をクリックする (画面は 3-1 の Allow access と同じ)
 4. Claude Code に `Authentication successful. Connected to figma` と表示されれば完了
@@ -210,7 +210,13 @@ claude mcp add --transport http --scope user figma https://mcp.figma.com/mcp
 ```bash
 claude mcp list
 ```
-
+- 実行結果
+```bash
+ubuntu@syunhigu-carbon:~/git/syunhigu/develop-dev (develop) $ claude mcp list
+claude.ai Claude Docs: https://api.anthropic.com/v1/pages/mcp - ✔ Connected
+figma: https://mcp.figma.com/mcp (HTTP) - ✔ Connected
+ubuntu@syunhigu-carbon:~/git/syunhigu/develop-dev (develop) $ 
+```
 #### チームで共有する場合
 
 プロジェクト直下の `.mcp.json` に URL だけ書いてコミットする (認証情報は書かない。認証は各自が `/mcp` で行う)。
